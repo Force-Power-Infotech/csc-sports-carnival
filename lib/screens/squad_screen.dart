@@ -1,68 +1,186 @@
 import 'package:flutter/material.dart';
+import 'package:rpgl/bases/api/participantapi.dart';
 import 'package:rpgl/bases/themes.dart';
 
 class SquadScreen extends StatelessWidget {
-  final int fieldCount; // Number of fields passed from the other screen
+  final int fieldCount;
+  final String teamid;
 
-  SquadScreen({required this.fieldCount});
+  SquadScreen({required this.fieldCount, required this.teamid});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0, // Flat app bar for a clean look
+        elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(
-          'Squad Form',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
+        title: FutureBuilder<ParticipantAPI>(
+          future: ParticipantAPI.participantlist(teamid, 'cricket'),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator(color: Colors.black);
+            }
+            return Text(
+              snapshot.data?.sportsHeadingName ?? 'Squad Selection',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
         ),
-        iconTheme: IconThemeData(color: Colors.black), // Back icon color
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SquadForm(fieldCount: fieldCount),
+        child: SquadForm(fieldCount: fieldCount, teamid: teamid),
       ),
     );
   }
 }
 
 class SquadForm extends StatefulWidget {
-  final int fieldCount; // Receive the field count from SquadScreen
+  final int fieldCount;
+  final String teamid;
 
-  SquadForm({required this.fieldCount});
+  SquadForm({required this.fieldCount, required this.teamid});
 
   @override
   _SquadFormState createState() => _SquadFormState();
 }
 
-class _SquadFormState extends State<SquadForm>
-    with SingleTickerProviderStateMixin {
+class _SquadFormState extends State<SquadForm> {
   final _formKey = GlobalKey<FormState>();
   List<TextEditingController> _controllers = [];
-  late AnimationController _animationController;
+  List<String?> _selectedRoles = []; // Store the selected role for each player
+  ParticipantAPI? participantData;
+  List<String> availablePlayers = [];
+  List<String> subheadings = [];
 
   @override
   void initState() {
     super.initState();
-    _initializeControllers(); // Initialize with the number of input fields passed
-
-    // Initialize Animation Controller
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-    _animationController
-        .forward(); // Start the animation when the screen is displayed
+    _initializeControllers();
+    _fetchParticipantData();
   }
 
   void _initializeControllers() {
     for (int i = 0; i < widget.fieldCount; i++) {
       _controllers.add(TextEditingController());
+      _selectedRoles.add(null); // Initialize each role as null
     }
+  }
+
+  Future<void> _fetchParticipantData() async {
+    ParticipantAPI data =
+        await ParticipantAPI.participantlist(widget.teamid, 'cricket');
+    setState(() {
+      participantData = data;
+      availablePlayers = List<String>.from(data.playerNames ?? []);
+      subheadings = [
+        data.subheading1 ?? 'Batsman Name',
+        data.subheading2 ?? 'Bowler Name',
+        data.subheading3 ?? 'Allrounder Name',
+        data.subheading4 ?? 'Wicket Keeper Name'
+      ];
+    });
+  }
+
+  Widget _buildField(String label, int index) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 5,
+            spreadRadius: 2,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Autocomplete<String>(
+                  optionsBuilder: (TextEditingValue textEditingValue) {
+                    if (textEditingValue.text.isEmpty) {
+                      return const Iterable<String>.empty();
+                    }
+                    return availablePlayers.where((String option) {
+                      return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          );
+                    });
+                  },
+                  onSelected: (String selection) {
+                    setState(() {
+                      _controllers[index].text = selection;
+                      availablePlayers.remove(selection);
+                    });
+                  },
+                  fieldViewBuilder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode,
+                      VoidCallback onFieldSubmitted) {
+                    return TextFormField(
+                      controller: textController,
+                      focusNode: focusNode,
+                      decoration: InputDecoration(
+                        labelText: label,
+                        labelStyle: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 18,
+                          horizontal: 16,
+                        ),
+                      ),
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Please enter a player name'
+                          : null,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: Colors.red),
+                onSelected: (String selectedSubheading) {
+                  setState(() {
+                    _selectedRoles[index] =
+                        selectedSubheading; // Update role for this player
+                  });
+                },
+                itemBuilder: (BuildContext context) {
+                  return subheadings.map((String subheading) {
+                    return PopupMenuItem<String>(
+                      value: subheading,
+                      child: Text(subheading),
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
   }
 
   @override
@@ -73,122 +191,48 @@ class _SquadFormState extends State<SquadForm>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Title
-            Text(
-              'Enter Squad Details',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppThemes.getBackground(),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Dynamic input fields with avatars and animated transitions
-            ...List.generate(_controllers.length, (index) {
-              return FadeTransition(
-                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(
-                    parent: _animationController,
-                    curve: Interval(index * 0.2, 1.0, curve: Curves.easeIn),
-                  ),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppThemes.getBackground().withOpacity(0.1),
-                        blurRadius: 10,
-                        spreadRadius: 5,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      // Player avatar placeholder
-                      CircleAvatar(
-                        backgroundColor:
-                            AppThemes.getBackground().withOpacity(0.2),
-                        radius: 25,
-                        child: Icon(
-                          Icons.person,
-                          size: 30,
-                          color: AppThemes.getBackground(),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-
-                      // Player name input field
-                      Expanded(
-                        child: TextFormField(
-                          controller: _controllers[index],
-                          decoration: InputDecoration(
-                            labelText: 'Player ${index + 1}',
-                            labelStyle: TextStyle(
-                              color: AppThemes.getBackground(),
-                              fontWeight: FontWeight.w500,
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey.shade100,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 18, horizontal: 16),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade300),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              borderSide: BorderSide(
-                                  color: AppThemes.getBackground(), width: 2),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a player name';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
-
-            // Save Button
+            if (participantData != null) ...[
+              for (int i = 0; i < widget.fieldCount; i++)
+                _buildField('Player ${i + 1}', i),
+            ],
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 14.0, horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14.0, horizontal: 40.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  backgroundColor: AppThemes.getBackground(),
-                  elevation: 8,
-                  shadowColor: AppThemes.getBackground().withOpacity(0.4),
+                  backgroundColor: Colors.red.shade700,
+                  elevation: 2,
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    // Collect structured player data with name and selected role
+                    List<Map<String, String>> squadData = [];
+
+                    for (int i = 0; i < widget.fieldCount; i++) {
+                      String playerName = _controllers[i].text;
+                      String? playerRole = _selectedRoles[i] ?? 'Unknown';
+
+                      if (playerName.isNotEmpty) {
+                        squadData.add({
+                          'name': playerName,
+                          'role':
+                              playerRole, // Map player name to selected role
+                        });
+                      }
+                    }
+
+                    print(squadData); // Print to console for verification
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Processing Squad Data')),
+                      const SnackBar(content: Text('Squad Data Saved')),
                     );
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Save Squad',
                   style: TextStyle(
                     fontSize: 16,
@@ -207,9 +251,8 @@ class _SquadFormState extends State<SquadForm>
   @override
   void dispose() {
     for (var controller in _controllers) {
-      controller.dispose(); // Dispose of all controllers
+      controller.dispose();
     }
-    _animationController.dispose();
     super.dispose();
   }
 }

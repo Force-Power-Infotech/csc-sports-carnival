@@ -56,16 +56,16 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
           );
         },
       ),
-      ButtonConfig(
-        imagePath: 'assets/images/copd.png',
-        text: 'COPD',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CopdScreen()),
-          );
-        },
-      ),
+      // ButtonConfig(
+      //   imagePath: 'assets/images/copd.png',
+      //   text: 'COPD',
+      //   onTap: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => CopdScreen()),
+      //     );
+      //   },
+      // ),
       ButtonConfig(
         imagePath: 'assets/images/committee.png',
         text: 'Committee',
