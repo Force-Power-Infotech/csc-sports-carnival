@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/screens/leaderboard_screen.dart';
+import 'package:rpgl/screens/leaderboard_webview_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
 import 'package:rpgl/screens/ownersRoom_screen.dart';
 import 'package:rpgl/screens/result_screen.dart';
@@ -48,9 +49,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LeaderboardScreen(
-                      sponsorImageUrl: widget.sponsorImageUrl,
-                    ),
+                    builder: (context) => LeaderboardWebViewScreen(),
+                    // builder: (context) => LeaderboardScreen(
+                    //   sponsorImageUrl: widget.sponsorImageUrl,
+                    // ),
                   ),
                 ),
               ),

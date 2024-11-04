@@ -367,12 +367,8 @@ class _MembersTabState extends State<MembersTab> {
                 // Table header
                 Row(
                   children: [
-                    const Expanded(
-                      flex: 1,
-                      child: SizedBox(), // Placeholder for avatar
-                    ),
                     Expanded(
-                      flex: 3,
+                      flex: 8,
                       child: Text(
                         'Name',
                         style: TextStyle(
@@ -391,24 +387,24 @@ class _MembersTabState extends State<MembersTab> {
                             color: AppThemes.getBackground()),
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        'TG',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppThemes.getBackground()),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        'A',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppThemes.getBackground()),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: Text(
+                    //     'TG',
+                    //     style: TextStyle(
+                    //         fontSize: 18,
+                    //         fontWeight: FontWeight.bold,
+                    //         color: AppThemes.getBackground()),
+                    //   ),
+                    // ),
+                    // Expanded(
+                    //   child: Text(
+                    //     'A',
+                    //     style: TextStyle(
+                    //         fontSize: 18,
+                    //         fontWeight: FontWeight.bold,
+                    //         color: AppThemes.getBackground()),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const Divider(thickness: 2),
@@ -424,8 +420,8 @@ class _MembersTabState extends State<MembersTab> {
                         sports: participant.sports?.isNotEmpty == true
                             ? participant.sports!
                             : ['No sports'],
-                        score: participant.totalGames ?? '0',
-                        minutesPlayed: participant.achievements ?? '0',
+                        // score: participant.totalGames ?? '0',
+                        // minutesPlayed: participant.achievements ?? '0',
                         teamImage: widget.teamImage,
                       );
                     },
@@ -445,16 +441,16 @@ class PlayerRows extends StatefulWidget {
   final String image;
   final String teamImage;
   final List<String> sports;
-  final String score;
-  final String minutesPlayed;
+  // final String score;
+  // final String minutesPlayed;
 
   const PlayerRows({
     super.key,
     required this.name,
     required this.image,
     required this.sports,
-    required this.score,
-    required this.minutesPlayed,
+    // required this.score,
+    // required this.minutesPlayed,
     required this.teamImage,
   });
 
@@ -544,19 +540,25 @@ class _PlayerRowsState extends State<PlayerRows> with TickerProviderStateMixin {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: widget.image.isNotEmpty
-                      ? NetworkImage(widget.image)
-                      : null,
-                  child: widget.image.isEmpty ? const Icon(Icons.person) : null,
-                ),
-                const SizedBox(width: 8),
                 Expanded(
-                  flex: 3,
-                  child: Text(
-                    widget.name,
-                    style: const TextStyle(fontSize: 16),
+                  flex: 8,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: widget.image.isNotEmpty
+                            ? NetworkImage(widget.image)
+                            : null,
+                        child: widget.image.isEmpty
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        widget.name,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -606,18 +608,18 @@ class _PlayerRowsState extends State<PlayerRows> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.score,
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    widget.minutesPlayed,
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                  ),
-                ),
+                // Expanded(
+                //   child: Text(
+                //     widget.score,
+                //     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                //   ),
+                // ),
+                // Expanded(
+                //   child: Text(
+                //     widget.minutesPlayed,
+                //     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                //   ),
+                // ),
               ],
             ),
             // Animated Sports dropdown
