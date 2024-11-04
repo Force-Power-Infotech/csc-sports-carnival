@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rpgl/bases/api/participantapi.dart';
-import 'package:rpgl/bases/themes.dart';
 
 class SquadScreen extends StatelessWidget {
   final int fieldCount;
@@ -10,6 +9,8 @@ class SquadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -19,7 +20,7 @@ class SquadScreen extends StatelessWidget {
           future: ParticipantAPI.participantlist(teamid, 'cricket'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator(color: Colors.black);
+              return const CircularProgressIndicator(color: Colors.white);
             }
             return Text(
               snapshot.data?.sportsHeadingName ?? 'Squad Selection',
@@ -33,8 +34,124 @@ class SquadScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SquadForm(fieldCount: fieldCount, teamid: teamid),
+        padding: EdgeInsets.all(screenWidth * 0.04),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MatchDetailsCard(),
+              const SizedBox(height: 10),
+              SquadForm(fieldCount: fieldCount, teamid: teamid),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MatchDetailsCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      padding: EdgeInsets.all(screenWidth * 0.04),
+      margin: EdgeInsets.only(bottom: screenWidth * 0.04),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey.shade800,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            spreadRadius: 2,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Match Details',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: screenWidth * 0.04,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Team A vs Team B',
+            style: TextStyle(
+                color: Colors.grey.shade300, fontSize: screenWidth * 0.035),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Date: Oct 30, 2024 | Time: 3:00 PM',
+            style: TextStyle(
+                color: Colors.grey.shade300, fontSize: screenWidth * 0.035),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SelectedSubheadingsCount extends StatelessWidget {
+  final Map<String, int> roleCounts;
+
+  SelectedSubheadingsCount({required this.roleCounts});
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.02),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: screenWidth * 0.02, horizontal: screenWidth * 0.04),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade800,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: roleCounts.entries.map((entry) {
+            return Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    entry.key,
+                    style: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${entry.value}',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: screenWidth * 0.05,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
@@ -53,10 +170,11 @@ class SquadForm extends StatefulWidget {
 class _SquadFormState extends State<SquadForm> {
   final _formKey = GlobalKey<FormState>();
   List<TextEditingController> _controllers = [];
-  List<String?> _selectedRoles = []; // Store the selected role for each player
+  List<String?> _selectedRoles = [];
   ParticipantAPI? participantData;
   List<String> availablePlayers = [];
   List<String> subheadings = [];
+  Map<String, int> roleCounts = {};
 
   @override
   void initState() {
@@ -68,7 +186,7 @@ class _SquadFormState extends State<SquadForm> {
   void _initializeControllers() {
     for (int i = 0; i < widget.fieldCount; i++) {
       _controllers.add(TextEditingController());
-      _selectedRoles.add(null); // Initialize each role as null
+      _selectedRoles.add(null);
     }
   }
 
@@ -79,105 +197,115 @@ class _SquadFormState extends State<SquadForm> {
       participantData = data;
       availablePlayers = List<String>.from(data.playerNames ?? []);
       subheadings = [
-        data.subheading1 ?? 'Batsman Name',
-        data.subheading2 ?? 'Bowler Name',
-        data.subheading3 ?? 'Allrounder Name',
-        data.subheading4 ?? 'Wicket Keeper Name'
+        data.subheading1 ?? 'Batsman',
+        data.subheading2 ?? 'Bowler',
+        data.subheading3 ?? 'Allrounder',
+        data.subheading4 ?? 'Wicket Keeper',
       ];
+      for (var subheading in subheadings) {
+        roleCounts[subheading] = 0;
+      }
     });
   }
 
-  Widget _buildField(String label, int index) {
+  Widget _buildPlayerRow(String label, int index) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      margin: EdgeInsets.only(bottom: screenWidth * 0.04),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 5,
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
             spreadRadius: 2,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
+        border: Border.all(color: Colors.grey.shade700, width: 1),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Autocomplete<String>(
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text.isEmpty) {
-                      return const Iterable<String>.empty();
-                    }
-                    return availablePlayers.where((String option) {
-                      return option.toLowerCase().contains(
-                            textEditingValue.text.toLowerCase(),
-                          );
-                    });
-                  },
-                  onSelected: (String selection) {
-                    setState(() {
-                      _controllers[index].text = selection;
-                      availablePlayers.remove(selection);
-                    });
-                  },
-                  fieldViewBuilder: (BuildContext context,
-                      TextEditingController textController,
-                      FocusNode focusNode,
-                      VoidCallback onFieldSubmitted) {
-                    return TextFormField(
-                      controller: textController,
-                      focusNode: focusNode,
-                      decoration: InputDecoration(
-                        labelText: label,
-                        labelStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                          horizontal: 16,
-                        ),
-                      ),
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Please enter a player name'
-                          : null,
-                    );
-                  },
-                ),
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.blue.shade900,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
               ),
-              const SizedBox(width: 12),
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert, color: Colors.red),
-                onSelected: (String selectedSubheading) {
-                  setState(() {
-                    _selectedRoles[index] =
-                        selectedSubheading; // Update role for this player
-                  });
-                },
-                itemBuilder: (BuildContext context) {
-                  return subheadings.map((String subheading) {
-                    return PopupMenuItem<String>(
-                      value: subheading,
-                      child: Text(subheading),
-                    );
-                  }).toList();
-                },
-              ),
-            ],
+              // image: const DecorationImage(
+              //   image: AssetImage('assets/images/player_placeholder.png'),
+              //   fit: BoxFit.cover,
+              // ),
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  availablePlayers.isNotEmpty
+                      ? availablePlayers[index % availablePlayers.length]
+                      : label,
+                  style: TextStyle(
+                      color: Colors.black, fontSize: screenWidth * 0.04),
+                ),
+                if (_selectedRoles[index] != null)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: screenWidth * 0.01,
+                      horizontal: screenWidth * 0.02,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black87, // Dark background color
+                      borderRadius: BorderRadius.circular(8), // Rounded edges
+                    ),
+                    child: Text(
+                      _selectedRoles[index]!,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.03,
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onSelected: (String selectedRole) {
+              setState(() {
+                _selectedRoles[index] = selectedRole;
+              });
+            },
+            itemBuilder: (BuildContext context) {
+              return subheadings.map((String role) {
+                return PopupMenuItem<String>(
+                  value: role,
+                  child: Text(role),
+                );
+              }).toList();
+            },
+          ),
+          const SizedBox(width: 8),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                shape: const CircleBorder(),
+                minimumSize: Size(screenWidth * 0.12,
+                    screenWidth * 0.12), // Adjusts the size of the circle
+              ),
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
+          ),
         ],
       ),
     );
@@ -185,74 +313,25 @@ class _SquadFormState extends State<SquadForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (participantData != null) ...[
-              for (int i = 0; i < widget.fieldCount; i++)
-                _buildField('Player ${i + 1}', i),
-            ],
-            const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 14.0, horizontal: 40.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  backgroundColor: Colors.red.shade700,
-                  elevation: 2,
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Collect structured player data with name and selected role
-                    List<Map<String, String>> squadData = [];
+    double screenWidth = MediaQuery.of(context).size.width;
 
-                    for (int i = 0; i < widget.fieldCount; i++) {
-                      String playerName = _controllers[i].text;
-                      String? playerRole = _selectedRoles[i] ?? 'Unknown';
-
-                      if (playerName.isNotEmpty) {
-                        squadData.add({
-                          'name': playerName,
-                          'role':
-                              playerRole, // Map player name to selected role
-                        });
-                      }
-                    }
-
-                    print(squadData); // Print to console for verification
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Squad Data Saved')),
-                    );
-                  }
-                },
-                child: const Text(
-                  'Save Squad',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+    return Column(
+      children: [
+        SelectedSubheadingsCount(roleCounts: roleCounts),
+        Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.fieldCount,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return _buildPlayerRow('Player ${index + 1}', index);
+              },
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 }

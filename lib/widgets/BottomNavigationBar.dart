@@ -9,7 +9,8 @@ import 'package:rpgl/screens/schedule_screen.dart';
 class CustomBottomNavigationBar extends StatefulWidget {
   final String sponsorImageUrl;
 
-  const CustomBottomNavigationBar({super.key, required this.sponsorImageUrl});
+  const CustomBottomNavigationBar({Key? key, required this.sponsorImageUrl})
+      : super(key: key);
 
   @override
   _CustomBottomNavigationBarState createState() =>
@@ -19,77 +20,84 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 60.0,
-          decoration: BoxDecoration(
-            color: AppThemes.getBackground(),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 10,
-                offset: const Offset(0, -5),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildNavItem(
-                context,
-                Icons.bar_chart,
-                'Leaderboard',
-                () => Navigator.push(
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 20, // Add some padding if you want it to float above the edge
+      child: Container(
+        height: 60.0,
+        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+        decoration: BoxDecoration(
+          color: Colors.transparent, // Make background transparent
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 3), // Position shadow slightly above
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            color: Colors.black.withOpacity(0.6), // Slightly dark overlay
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buildNavItem(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LeaderboardScreen(
-                      sponsorImageUrl: widget.sponsorImageUrl,
+                  Icons.bar_chart,
+                  'Leaderboard',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LeaderboardScreen(
+                        sponsorImageUrl: widget.sponsorImageUrl,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              buildNavItem(
-                context,
-                Icons.calendar_month,
-                'Schedule',
-                () => Navigator.push(
+                buildNavItem(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => ScheduleScreen(),
-                  ),
-                ),
-              ),
-              buildNavItem(
-                context,
-                Icons.star,
-                'Result',
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ResultScreen(),
-                  ),
-                ),
-              ),
-              buildNavItem(
-                context,
-                Icons.person,
-                "Captain's Room",
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(
-                      isFromLogin: true,
+                  Icons.calendar_month,
+                  'Schedule',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScheduleScreen(),
                     ),
                   ),
                 ),
-              ),
-            ].map((item) {
-              return Expanded(child: item);
-            }).toList(),
+                buildNavItem(
+                  context,
+                  Icons.star,
+                  'Result',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultScreen(),
+                    ),
+                  ),
+                ),
+                buildNavItem(
+                  context,
+                  Icons.person,
+                  "Captain's Room",
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                        isFromLogin: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -103,13 +111,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          padding: EdgeInsets.zero,
           icon: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: Colors.white),
+              const SizedBox(height: 4),
               Text(
                 label,
-                style: TextStyle(color: Colors.white, fontSize: 10),
+                style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
             ],
           ),

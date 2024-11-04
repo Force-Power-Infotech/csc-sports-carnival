@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rpgl/screens/match_selection_screen.dart';
 import 'package:rpgl/screens/playingsquad_screen.dart';
 import 'package:rpgl/screens/squad_screen.dart';
 
@@ -45,11 +46,11 @@ class SportsButtonList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                // builder: (context) => PlayingsquadScreen(
-                builder: (context) => SquadScreen(
-                  fieldCount: 4,
-                  teamid: '2',
-                ),
+                builder: (context) => MatchSelectionScreen(
+                    // builder: (context) => SquadScreen(
+                    //   fieldCount: 4,
+                    //   teamid: '2',
+                    ),
               ),
             );
           },
