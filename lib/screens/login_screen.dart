@@ -135,6 +135,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (enteredOtp == _serverOtp) {
       // Successful OTP match, save the data locally
       OwnerLoginAPI ownerLoginData = OwnerLoginAPI.fromJson(response.toJson());
+      if (ownerLoginData.memberType != 'O') {
+        //snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${ownerLoginData.accessibleMessage}')),
+        );
+        Navigator.pop(context);
+        return;
+      }
       await OwnerLoginAPI.saveDataLocally(ownerLoginData);
       log('saved');
       log(widget.isFromLogin.toString());

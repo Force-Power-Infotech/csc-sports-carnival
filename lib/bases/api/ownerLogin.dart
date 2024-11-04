@@ -15,6 +15,7 @@ class OwnerLoginAPI {
   String? bothTeamParticipantSet;
   String? myTeamAdminName;
   String? scoreUpdateWeblink;
+  String? accessibleMessage;
 
   OwnerLoginAPI(
       {this.processStatus,
@@ -27,7 +28,8 @@ class OwnerLoginAPI {
       this.showMatchInLive,
       this.bothTeamParticipantSet,
       this.myTeamAdminName,
-      this.scoreUpdateWeblink});
+      this.scoreUpdateWeblink,
+      this.accessibleMessage});
 
   OwnerLoginAPI.fromJson(Map<String, dynamic> json) {
     processStatus = json['process_status'];
@@ -45,10 +47,11 @@ class OwnerLoginAPI {
     bothTeamParticipantSet = json['both_team_participant_set'];
     myTeamAdminName = json['my_team_admin_name'];
     scoreUpdateWeblink = json['score_update_weblink'];
+    accessibleMessage = json['accessible_message'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['process_status'] = processStatus;
     data['process_message'] = processMessage;
     data['OTP'] = oTP;
@@ -62,6 +65,7 @@ class OwnerLoginAPI {
     data['both_team_participant_set'] = bothTeamParticipantSet;
     data['my_team_admin_name'] = myTeamAdminName;
     data['score_update_weblink'] = scoreUpdateWeblink;
+    data['accessible_message'] = accessibleMessage;
     return data;
   }
 
@@ -158,7 +162,7 @@ class ParticipantData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['process_status'] = processStatus;
     data['process_message'] = processMessage;
     data['team_image'] = teamImage;
