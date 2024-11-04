@@ -20,81 +20,76 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 20, // Add some padding if you want it to float above the edge
-      child: Container(
-        height: 60.0,
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-        decoration: BoxDecoration(
-          color: Colors.transparent, // Make background transparent
-          borderRadius: BorderRadius.circular(50),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 3), // Position shadow slightly above
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: Container(
-            color: Colors.black.withOpacity(0.6), // Slightly dark overlay
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                buildNavItem(
+    return Container(
+      height: 60.0,
+      // margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      decoration: BoxDecoration(
+        color: Colors.transparent, // Make background transparent
+        borderRadius: BorderRadius.circular(50),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 3), // Position shadow slightly above
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        // borderRadius: BorderRadius.circular(50),
+        child: Container(
+          color: Colors.black.withOpacity(0.6), // Slightly dark overlay
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildNavItem(
+                context,
+                Icons.bar_chart,
+                'Leaderboard',
+                () => Navigator.push(
                   context,
-                  Icons.bar_chart,
-                  'Leaderboard',
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LeaderboardScreen(
-                        sponsorImageUrl: widget.sponsorImageUrl,
-                      ),
+                  MaterialPageRoute(
+                    builder: (context) => LeaderboardScreen(
+                      sponsorImageUrl: widget.sponsorImageUrl,
                     ),
                   ),
                 ),
-                buildNavItem(
+              ),
+              buildNavItem(
+                context,
+                Icons.calendar_month,
+                'Schedule',
+                () => Navigator.push(
                   context,
-                  Icons.calendar_month,
-                  'Schedule',
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ScheduleScreen(),
+                  MaterialPageRoute(
+                    builder: (context) => ScheduleScreen(),
+                  ),
+                ),
+              ),
+              buildNavItem(
+                context,
+                Icons.star,
+                'Result',
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultScreen(),
+                  ),
+                ),
+              ),
+              buildNavItem(
+                context,
+                Icons.person,
+                "Captain's Room",
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(
+                      isFromLogin: true,
                     ),
                   ),
                 ),
-                buildNavItem(
-                  context,
-                  Icons.star,
-                  'Result',
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ResultScreen(),
-                    ),
-                  ),
-                ),
-                buildNavItem(
-                  context,
-                  Icons.person,
-                  "Captain's Room",
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(
-                        isFromLogin: true,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -99,15 +99,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           onTap: () {
                             setState(() {
                               _selectedIndex = index;
-                              _pageController.animateToPage(index,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut);
+                              _pageController.animateToPage(
+                                index,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
                             });
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            width: MediaQuery.of(context).size.width /
-                                options.length,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            margin: const EdgeInsets.symmetric(horizontal: 8),
                             decoration: BoxDecoration(
                               border: _selectedIndex == index
                                   ? Border(

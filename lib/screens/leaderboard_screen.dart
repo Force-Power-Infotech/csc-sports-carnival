@@ -121,184 +121,175 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             ))
           : Column(
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: _dataSources.keys.map((groupName) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedGroup = groupName;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: selectedGroup == groupName
-                                ? AppThemes.getBackground()
-                                : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                          ),
-                          child: Text(
-                            groupName,
-                            style: TextStyle(
-                              color: selectedGroup == groupName
-                                  ? Colors.white
-                                  : AppThemes.getBackground(),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Expanded(
-                  child: SfDataGrid(
-                    source: _dataSources[selectedGroup] ??
-                        LeaderboardDataSource(LeaderboardDetails(
-                            groups: {})), // Fallback to an empty data source
-                    // SfDataGrid columns definition
-                    columns: [
-                      GridColumn(
-                        columnName: 'team',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.centerLeft,
-                          color: Colors.black,
-                          child: const Row(
-                            children: [
-                              SizedBox(width: 4),
-                              Text('Team',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ),
-                        width: 2.70 * columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'gp',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('GP',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'gw',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('GW',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'mo',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('MO',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'mw',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('MW',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'ml',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('ML',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'mt',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('MT',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                      GridColumn(
-                        columnName: 'tp',
-                        label: Container(
-                          padding: const EdgeInsets.all(4.0),
-                          alignment: Alignment.center,
-                          color: Colors.black,
-                          child: const Text('TP',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                        width: columnWidth,
-                      ),
-                    ],
-
-                    controller: DataGridController(),
-                    verticalScrollController: _scrollController,
-                  ),
-                ),
-                // Positioned(
-                //   bottom: 0,
-                //   left: 0,
-                //   right: 0,
-                //   child: Container(
-                //     height: 200,
-                //     width: double.infinity,
-                //     color: widget.sponsorImageUrl != null &&
-                //             widget.sponsorImageUrl.isNotEmpty
-                //         ? Colors.grey
-                //         : Colors.grey[300],
-                //     child: widget.sponsorImageUrl != null &&
-                //             widget.sponsorImageUrl.isNotEmpty
-                //         ? Image.network(
-                //             widget.sponsorImageUrl,
-                //             fit: BoxFit.cover,
-                //           )
-                //         : null,
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: _dataSources.keys.map((groupName) {
+                //       return Padding(
+                //         padding: const EdgeInsets.only(right: 16.0),
+                //         child: ElevatedButton(
+                //           onPressed: () {
+                //             setState(() {
+                //               selectedGroup = groupName;
+                //             });
+                //           },
+                //           style: ElevatedButton.styleFrom(
+                //             backgroundColor: selectedGroup == groupName
+                //                 ? AppThemes.getBackground()
+                //                 : Colors.white,
+                //             shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(8.0),
+                //             ),
+                //             padding:
+                //                 const EdgeInsets.symmetric(horizontal: 16.0),
+                //           ),
+                //           child: Text(
+                //             groupName,
+                //             style: TextStyle(
+                //               color: selectedGroup == groupName
+                //                   ? Colors.white
+                //                   : AppThemes.getBackground(),
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }).toList(),
                 //   ),
                 // ),
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: widget.sponsorImageUrl != null &&
-                          widget.sponsorImageUrl.isNotEmpty
-                      ? Colors.grey
-                      : Colors.grey[300],
-                  child: widget.sponsorImageUrl != null &&
-                          widget.sponsorImageUrl.isNotEmpty
-                      ? Image.network(
-                          widget.sponsorImageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : null,
+                SfDataGrid(
+                  source: _dataSources[selectedGroup] ??
+                      LeaderboardDataSource(LeaderboardDetails(
+                          groups: {})), // Fallback to an empty data source
+                  columnWidthMode: ColumnWidthMode.fill,
+                  // SfDataGrid columns definition
+                  columns: [
+                    GridColumn(
+                      columnName: 'team',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.centerLeft,
+                        color: Colors.black,
+                        child: const Row(
+                          children: [
+                            SizedBox(width: 4),
+                            Text('Team', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                      // width: 3.0 * columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'mp',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('R',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'mw',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('MP',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'ml',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('MW',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'tp',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('ML',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'nrr',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('TP',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                    GridColumn(
+                      columnName: 'mt',
+                      label: Container(
+                        padding: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        color: Colors.black,
+                        child: const Text('NRR',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      width: columnWidth,
+                    ),
+                  ],
+
+                  controller: DataGridController(),
+                  verticalScrollController: _scrollController,
                 ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  color: Colors.grey[400],
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // R - Rank
+                      // MP - Matches Played
+                      // MW	- Matches Won
+                      // ML - Matches Lost
+                      // TP - Total Points
+                      // NRR - Net Run Rate
+
+                      Text('R - Rank'),
+                      Text('MP - Matches Played'),
+                      Text('MW - Matches Won'),
+                      Text('ML - Matches Lost'),
+                      Text('TP - Total Points'),
+                      Text('NRR - Net Run Rate'),
+                    ],
+                  ),
+                ),
+                // Container(
+                //   height: 200,
+                //   width: double.infinity,
+                //   color: widget.sponsorImageUrl != null &&
+                //           widget.sponsorImageUrl.isNotEmpty
+                //       ? Colors.grey
+                //       : Colors.grey[300],
+                //   child: widget.sponsorImageUrl != null &&
+                //           widget.sponsorImageUrl.isNotEmpty
+                //       ? Image.network(
+                //           widget.sponsorImageUrl,
+                //           fit: BoxFit.cover,
+                //         )
+                //       : null,
+                // ),
               ],
             ),
     );
@@ -319,13 +310,15 @@ class LeaderboardDataSource extends DataGridSource {
         return DataGridRow(cells: [
           DataGridCell<String>(
               columnName: 'team', value: "${data.team},${data.teamImage}"),
-          DataGridCell<String>(columnName: 'gp', value: data.played.toString()),
-          DataGridCell<String>(columnName: 'gw', value: data.won.toString()),
-          DataGridCell<String>(columnName: 'mo', value: data.group.toString()),
+          DataGridCell<String>(
+              columnName: 'r', value: data.noresult.toString()),
+          DataGridCell<String>(columnName: 'mp', value: data.played.toString()),
           DataGridCell<String>(columnName: 'mw', value: data.won.toString()),
           DataGridCell<String>(columnName: 'ml', value: data.lost.toString()),
-          DataGridCell<String>(columnName: 'mt', value: data.lost.toString()),
           DataGridCell<String>(columnName: 'tp', value: data.points.toString()),
+          DataGridCell<String>(
+              columnName: 'nrr', value: data.netDifference.toString()),
+          // DataGridCell<String>(columnName: 'tp', value: data.points.toString()),
         ]);
       }).toList());
     });
@@ -344,13 +337,6 @@ class LeaderboardDataSource extends DataGridSource {
 
         return Row(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: CircleAvatar(
-            //     backgroundImage: NetworkImage(teamImage),
-            //     radius: 12,
-            //   ),
-            // ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(

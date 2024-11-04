@@ -91,119 +91,221 @@ class _OwnersAndTeamsScreenState extends State<OwnersAndTeamsScreen> {
               },
             ),
           ),
-          SliverPersistentHeader(
-            delegate: _SearchAndButtonHeaderDelegate(
-              selectedGroup: selectedGroup,
-              onSelectGroup: (groupName) {
-                setState(() {
-                  selectedGroup = groupName;
-                });
-              },
-              groups: teamAndParticipantsDetails?.groups?.keys.toList() ?? [],
-            ),
-            pinned: true,
-          ),
-          Container(
-            child: SliverPadding(
-              padding: const EdgeInsets.only(
-                  top: 8.0), // Adjust this value as needed
-              sliver: isLoading
-                  ? const SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          var group = teamAndParticipantsDetails
-                                  ?.groups?[selectedGroup] ??
-                              [];
-                          var team = group[index];
-                          return Container(
-                            // color: Colors.white,
-                            child: Card(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 16),
-                              elevation: 4,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => TeamSplashScreen(
-                                        imageUrl: '${team.theImageLink}',
-                                        teamId: '${team.id}',
-                                      ),
+          // SliverPersistentHeader(
+          // delegate: _SearchAndButtonHeaderDelegate(
+          //   selectedGroup: selectedGroup,
+          //   onSelectGroup: (groupName) {
+          //     setState(() {
+          //       selectedGroup = groupName;
+          //     });
+          //   },
+          //   groups: teamAndParticipantsDetails?.groups?.keys.toList() ?? [],
+          // ),
+
+          //   pinned: true,
+          // ),
+          // SliverPadding(
+          //   padding:
+          //       const EdgeInsets.only(top: 0.0), // Adjust this value as needed
+          //   sliver: isLoading
+          //       ? const SliverToBoxAdapter(
+          //           child: Center(child: CircularProgressIndicator()),
+          //         )
+          //       : SliverList(
+          //           delegate: SliverChildBuilderDelegate(
+          //             (BuildContext context, int index) {
+          //               var group = teamAndParticipantsDetails
+          //                       ?.groups?[selectedGroup] ??
+          //                   [];
+          //               var team = group[index];
+          //               return Container(
+          //                 // color: Colors.white,
+          //                 child: Card(
+          //                   margin: const EdgeInsets.symmetric(
+          //                       vertical: 8.0, horizontal: 16),
+          //                   elevation: 4,
+          //                   child: InkWell(
+          //                     onTap: () {
+          //                       Navigator.push(
+          //                         context,
+          //                         MaterialPageRoute(
+          //                           builder: (context) => TeamSplashScreen(
+          //                             imageUrl: '${team.theImageLink}',
+          //                             teamId: '${team.id}',
+          //                           ),
+          //                         ),
+          //                       );
+          //                     },
+          //                     child: Row(
+          //                       children: [
+          //                         ClipRRect(
+          //                           borderRadius: const BorderRadius.only(
+          //                             topLeft: Radius.circular(16.0),
+          //                             bottomLeft: Radius.circular(16.0),
+          //                           ),
+          //                           child: Container(
+          //                             width: 100,
+          //                             height: 100,
+          //                             color: Colors.grey[300],
+          //                             child: Image.network(
+          //                               team.theImageLink ?? '',
+          //                               fit: BoxFit.cover,
+          //                               errorBuilder:
+          //                                   (context, error, stackTrace) {
+          //                                 return Center(
+          //                                   child: CircleAvatar(
+          //                                     backgroundColor: Colors.grey[400],
+          //                                     child: const Icon(Icons.image,
+          //                                         color: Colors.white),
+          //                                   ),
+          //                                 );
+          //                               },
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         Expanded(
+          //                           child: Padding(
+          //                             padding: const EdgeInsets.all(12.0),
+          //                             child: Column(
+          //                               crossAxisAlignment:
+          //                                   CrossAxisAlignment.start,
+          //                               children: [
+          //                                 Text(
+          //                                   team.team ?? 'Team Name',
+          //                                   style: const TextStyle(
+          //                                     fontSize: 14,
+          //                                     fontWeight: FontWeight.bold,
+          //                                     color: Colors.black,
+          //                                   ),
+          //                                   textAlign: TextAlign.center,
+          //                                 ),
+          //                                 const SizedBox(height: 4),
+          //                                 Text(
+          //                                   team.owners ?? 'Owner Name',
+          //                                   style: TextStyle(
+          //                                     fontSize: 14,
+          //                                     color: Colors.grey[900],
+          //                                   ),
+          //                                 ),
+          //                               ],
+          //                             ),
+          //                           ),
+          //                         ),
+          //                       ],
+          //                     ),
+          //                   ),
+          //                 ),
+          //               );
+          //             },
+          //             childCount: teamAndParticipantsDetails
+          //                     ?.groups?[selectedGroup]?.length ??
+          //                 0,
+          //           ),
+          //         ),
+          // ),
+          SliverPadding(
+            padding:
+                const EdgeInsets.only(top: 0.0), // Adjust this value as needed
+            sliver: isLoading
+                ? const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        // Combine all teams from each group into a single list
+                        var allTeams = teamAndParticipantsDetails
+                                ?.groups?.values
+                                .expand((group) => group)
+                                .toList() ??
+                            [];
+                        var team = allTeams[index];
+
+                        return Container(
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            elevation: 4,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TeamSplashScreen(
+                                      imageUrl: team.theImageLink ?? '',
+                                      teamId: team.id ?? '',
                                     ),
-                                  );
-                                },
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(16.0),
-                                        bottomLeft: Radius.circular(16.0),
-                                      ),
-                                      child: Container(
-                                        width: 100,
-                                        height: 100,
-                                        color: Colors.grey[300],
-                                        child: Image.network(
-                                          team.theImageLink ?? '',
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Center(
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.grey[400],
-                                                child: const Icon(Icons.image,
-                                                    color: Colors.white),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(16.0),
+                                      bottomLeft: Radius.circular(16.0),
                                     ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              team.team ?? 'Team Name',
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                              textAlign: TextAlign.center,
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      color: Colors.grey[300],
+                                      child: Image.network(
+                                        team.theImageLink ?? '',
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Center(
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.grey[400],
+                                              child: const Icon(Icons.image,
+                                                  color: Colors.white),
                                             ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              team.owners ?? 'Owner Name',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          );
+                                        },
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            team.team ?? 'Team Name',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            team.owners ?? 'Owner Name',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[900],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          );
-                        },
-                        childCount: teamAndParticipantsDetails
-                                ?.groups?[selectedGroup]?.length ??
-                            0,
-                      ),
+                          ),
+                        );
+                      },
+                      // Use the combined list length as the child count
+                      childCount: teamAndParticipantsDetails?.groups?.values
+                              .expand((group) => group)
+                              .length ??
+                          0,
                     ),
-            ),
+                  ),
           ),
         ],
       ),
@@ -226,7 +328,7 @@ class _SearchAndButtonHeaderDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      // color: Colors.white,
+      // color: Colors.red,
       child: Column(
         children: [
           Padding(
@@ -241,17 +343,17 @@ class _SearchAndButtonHeaderDelegate extends SliverPersistentHeaderDelegate {
               ),
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: groups
-                  .map((groupName) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: _buildButton(groupName),
-                      ))
-                  .toList(),
-            ),
-          ),
+          // SingleChildScrollView(
+          //   scrollDirection: Axis.horizontal,
+          //   child: Row(
+          //     children: groups
+          //         .map((groupName) => Padding(
+          //               padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //               child: _buildButton(groupName),
+          //             ))
+          //         .toList(),
+          //   ),
+          // ),
         ],
       ),
     );

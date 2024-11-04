@@ -192,7 +192,7 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
                       child: Text(
                         button.text,
                         style: TextStyle(
-                          fontSize: fontSize, // Use responsive font size
+                          fontSize: 10, // Use responsive font size
                           fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.center,
