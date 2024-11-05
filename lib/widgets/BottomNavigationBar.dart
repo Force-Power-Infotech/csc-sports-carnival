@@ -27,71 +27,74 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       decoration: BoxDecoration(
         color: Colors.transparent, // Make background transparent
         borderRadius: BorderRadius.circular(50),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 3), // Position shadow slightly above
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.3),
+        //     blurRadius: 8,
+        //     offset: const Offset(0, 3), // Position shadow slightly above
+        //   ),
+        // ],
       ),
-      child: ClipRRect(
-        // borderRadius: BorderRadius.circular(50),
-        child: Container(
-          color: Colors.black.withOpacity(0.6), // Slightly dark overlay
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildNavItem(
-                context,
-                Icons.bar_chart,
-                'Leaderboard',
-                () => Navigator.push(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            color: AppThemes.getBackground(), // Slightly dark overlay
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buildNavItem(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LeaderboardWebViewScreen(),
-                    // builder: (context) => LeaderboardScreen(
-                    //   sponsorImageUrl: widget.sponsorImageUrl,
-                    // ),
-                  ),
-                ),
-              ),
-              buildNavItem(
-                context,
-                Icons.calendar_month,
-                'Schedule',
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ScheduleScreen(),
-                  ),
-                ),
-              ),
-              buildNavItem(
-                context,
-                Icons.star,
-                'Result',
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ResultScreen(),
-                  ),
-                ),
-              ),
-              buildNavItem(
-                context,
-                Icons.person,
-                "Captain's Room",
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginScreen(
-                      isFromLogin: true,
+                  Icons.bar_chart,
+                  'Leaderboard',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LeaderboardWebViewScreen(),
+                      // builder: (context) => LeaderboardScreen(
+                      //   sponsorImageUrl: widget.sponsorImageUrl,
+                      // ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                buildNavItem(
+                  context,
+                  Icons.calendar_month,
+                  'Schedule',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScheduleScreen(),
+                    ),
+                  ),
+                ),
+                buildNavItem(
+                  context,
+                  Icons.star,
+                  'Result',
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultScreen(),
+                    ),
+                  ),
+                ),
+                buildNavItem(
+                  context,
+                  Icons.person,
+                  "Captain's Room",
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                        isFromLogin: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

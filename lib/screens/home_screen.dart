@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     homeScreenSideImage = response.homeScreenSideImage ?? '';
     leagueName = response.usernameExistStatus ?? '';
     print("Home Screen Side Image URL: $homeScreenSideImage"); // Debug print
-    // Temporary lists to avoid duplicate data
+
     List<String> newBannerImages = [];
     List<String> newBannerLinks = [];
     List<String> newScoreImages = [];
@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     }
-    // Process SCORE data if available
     if (response.leaderboardTypeData?.sCORE != null) {
       response.leaderboardTypeData!.sCORE!.forEach((score) {
         if (score.bannerImage != null) {
@@ -68,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     }
-    // Process STREAM data if available
     if (response.leaderboardTypeData?.sTREAM != null) {
       response.leaderboardTypeData!.sTREAM!.forEach((stream) {
         if (stream.bannerImage != null) {
@@ -82,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    // Update state only once data is ready
     setState(() {
       scoreImages = newScoreImages;
       scoreLinks = newScoreLinks;
@@ -101,10 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Stack(
-              clipBehavior:
-                  Clip.none, // Allow overflowing content to be visible
+              clipBehavior: Clip.none,
               children: [
-                // Clipping the banner image with bottom-rounded corners
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
@@ -113,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: bannerImages.isNotEmpty
                       ? Image.network(
                           bannerImages[0] ?? '',
-                          height: 200, // Set the desired height for the image
+                          height: 200,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
@@ -127,9 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.grey,
                         ),
                 ),
-                // Adding gradient overlay
                 Container(
-                  height: 200, // Match the height of the image
+                  height: 200,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -141,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                // Notification icon positioned at the top-right
                 Positioned(
                   top: 50,
                   right: 10,
@@ -158,10 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.white,
                   ),
                 ),
-                // Side image positioned at the bottom-left with rounded borders and shadow, half inside and half outside the Stack
                 Positioned(
-                  bottom:
-                      -35, // Adjust to place half the image outside the Stack
+                  bottom: -35,
                   left: 20,
                   child: Container(
                     decoration: BoxDecoration(
@@ -201,18 +192,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-
-            // League name container with centered text and styling
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16, top: 64),
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFFF4E50),
-                      Color(0xFF8B0000)
-                    ], // red to dark red
+                    colors: [Color(0xFFFF4E50), Color(0xFF8B0000)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -237,7 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
             StaticButtonGrid(),
             ScoreCarousel(
               scoreImages: scoreImages,
@@ -250,9 +235,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(
-        sponsorImageUrl: '' ?? '',
+      floatingActionButton: const CustomBottomNavigationBar(
+        sponsorImageUrl: '',
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
