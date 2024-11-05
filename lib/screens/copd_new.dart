@@ -83,58 +83,63 @@ class _CopdnewState extends State<Copdnew> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 0.8,
+                  childAspectRatio: 1.0,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                 ),
                 itemCount: sportsDetails.length,
                 itemBuilder: (context, index) {
                   final sport = sportsDetails[index];
-                  return Card(
-                    color: Colors.white,
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    shadowColor: Colors.black.withOpacity(0.1),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () {
-                        if (sport.webview != null) {
-                          showWebView(context, sport.webview!);
-                        }
-                      },
+                  return GestureDetector(
+                    onTap: () {
+                      if (sport.webview != null) {
+                        showWebView(context, sport.webview!);
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade700,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(30.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.shade300.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: Image.network(
-                                sport.sportsLogo ?? '',
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.image,
-                                        color: Colors.grey),
-                                  );
-                                },
-                              ),
+                          ClipOval(
+                            child: Image.network(
+                              sport.sportsLogo ?? '',
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  width: 60,
+                                  height: 60,
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.image,
+                                      color: Colors.grey),
+                                );
+                              },
                             ),
                           ),
+                          const SizedBox(height: 8),
                           Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
                               sport.sportsName ?? '',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black.withOpacity(0.7),
+                                color: Colors.white,
                               ),
                               textAlign: TextAlign.center,
                             ),
