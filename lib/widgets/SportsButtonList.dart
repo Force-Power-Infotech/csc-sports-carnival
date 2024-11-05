@@ -5,17 +5,17 @@ import 'package:rpgl/screens/squad_screen.dart';
 
 class SportsButtonList extends StatelessWidget {
   final List<Map<String, dynamic>> sports = [
-    // {"icon": "assets/images/badminton.gif", "name": "Badminton"},
-    // {"icon": "assets/images/chess.png", "name": "Chess"},
+    {"icon": "assets/images/badminton.gif", "name": "Badminton"},
+    {"icon": "assets/images/chess.png", "name": "Chess"},
     {"icon": "assets/images/cricket.gif", "name": "Cricket"},
-    // {"icon": "assets/images/darts.gif", "name": "Darts"},
-    // {"icon": "assets/images/futsal.gif", "name": "Futsal"},
-    // {"icon": "assets/images/poker.png", "name": "Poker"},
-    // {"icon": "assets/images/snooker.png", "name": "Snooker"},
-    // {"icon": "assets/images/squash.png", "name": "Squash"},
-    // {"icon": "assets/images/swimming.png", "name": "Swimming"},
-    // {"icon": "assets/images/tt.png", "name": "Table Tennis"},
-    // {"icon": "assets/images/triathlon.png", "name": "Triathlon"},
+    {"icon": "assets/images/darts.gif", "name": "Darts"},
+    {"icon": "assets/images/futsal.gif", "name": "Futsal"},
+    {"icon": "assets/images/poker.png", "name": "Poker"},
+    {"icon": "assets/images/snooker.png", "name": "Snooker"},
+    {"icon": "assets/images/squash.png", "name": "Squash"},
+    {"icon": "assets/images/swimming.png", "name": "Swimming"},
+    {"icon": "assets/images/tt.png", "name": "Table Tennis"},
+    {"icon": "assets/images/triathlon.png", "name": "Triathlon"},
   ];
 
   @override

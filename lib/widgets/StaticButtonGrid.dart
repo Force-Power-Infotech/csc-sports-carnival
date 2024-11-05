@@ -5,7 +5,9 @@ import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/screens/about_screen.dart';
 import 'package:rpgl/screens/committee_screen.dart';
+import 'package:rpgl/screens/copd_new.dart';
 import 'package:rpgl/screens/copd_screen.dart';
+import 'package:rpgl/screens/gallery_screen.dart';
 import 'package:rpgl/screens/ownersandteams_screen.dart';
 import 'package:rpgl/screens/play_along_screen.dart';
 import 'package:rpgl/screens/refereAndMarshal_screen.dart';
@@ -56,16 +58,17 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
           );
         },
       ),
-      // ButtonConfig(
-      //   imagePath: 'assets/images/copd.png',
-      //   text: 'COPD',
-      //   onTap: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => CopdScreen()),
-      //     );
-      //   },
-      // ),
+      ButtonConfig(
+        imagePath: 'assets/images/copd.png',
+        text: 'COPD',
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Copdnew()),
+            // MaterialPageRoute(builder: (context) => CopdScreen()),
+          );
+        },
+      ),
       ButtonConfig(
         imagePath: 'assets/images/committee.png',
         text: 'Committee',
@@ -96,23 +99,33 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
           );
         },
       ),
+      // ButtonConfig(
+      //   imagePath: 'assets/images/statistic.png',
+      //   text: 'Statistics',
+      //   onTap: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => StatisticsWebViewScreen()),
+      //     );
+      //   },
+      // ),
+      // ButtonConfig(
+      //   imagePath: 'assets/images/refree.png',
+      //   text: 'Referee & Marshall',
+      //   onTap: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => RefereeAndMarshalScreen()),
+      //     );
+      //   },
+      // ),
       ButtonConfig(
-        imagePath: 'assets/images/statistic.png',
-        text: 'Statistics',
+        imagePath: 'assets/images/gallery.png',
+        text: 'Gallery',
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => StatisticsWebViewScreen()),
-          );
-        },
-      ),
-      ButtonConfig(
-        imagePath: 'assets/images/refree.png',
-        text: 'Referee & Marshall',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RefereeAndMarshalScreen()),
+            MaterialPageRoute(builder: (context) => GalleryScreen()),
           );
         },
       ),

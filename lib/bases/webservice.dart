@@ -21,6 +21,7 @@ class Webservice {
   static const String ws_live_score_status = "ws_live_score_status.php";
   static const String about_api = "about_api.php";
   static const String copd_api = "copd_api.php";
+  static const String ws_show_gallery = "ws_show_gallery.php";
   static const String update_perticipant_for_game_v2 =
       "update_perticipant_for_game_v2.php";
 
