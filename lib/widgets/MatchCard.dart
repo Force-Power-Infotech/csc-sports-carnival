@@ -10,6 +10,7 @@ class MatchCard extends StatelessWidget {
   final String teamB;
   final String date;
   final String time;
+  final String location;
   final bool showResult;
   final String? result;
   final String sportsName;
@@ -24,6 +25,7 @@ class MatchCard extends StatelessWidget {
     required this.teamB,
     required this.date,
     required this.time,
+    required this.location,
     required this.sportsName,
     this.showResult = false,
     this.result,
@@ -163,6 +165,20 @@ class MatchCard extends StatelessWidget {
                               const SizedBox(width: 6),
                               Text(
                                 time,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on,
+                                  size: 16, color: Colors.grey),
+                              const SizedBox(width: 6),
+                              Text(
+                                location,
                                 style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.black54,

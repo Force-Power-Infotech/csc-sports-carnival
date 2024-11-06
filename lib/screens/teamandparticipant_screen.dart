@@ -213,6 +213,8 @@ class _ResultTabState extends State<ResultTab> {
           time: match.time!,
           sportsName: match.sportsName!,
           showResult: true,
+          location: match.location!,
+
           result:
               match.results ?? 'No result available', // Provide a default value
         );
@@ -309,6 +311,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
           date: match.date!,
           time: match.time!,
           sportsName: match.sportsName!,
+          location: match.location!,
         );
       },
     );

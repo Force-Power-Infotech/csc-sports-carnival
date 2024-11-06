@@ -504,6 +504,7 @@ class _OwnersRoomScreenState extends State<OwnersRoomScreen> {
                 date: match.date!,
                 time: match.time!,
                 sportsName: match.sportsName!,
+                location: match.location!,
               );
             }).toList(),
           ),
@@ -555,6 +556,8 @@ class _OwnersRoomScreenState extends State<OwnersRoomScreen> {
                 time: match.time!,
                 sportsName: match.sportsName!,
                 showResult: true,
+                location: match.location!,
+
                 result: match.results ??
                     'No result available', // Provide a default value
               );

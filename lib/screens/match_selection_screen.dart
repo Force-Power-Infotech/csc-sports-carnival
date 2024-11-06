@@ -27,6 +27,7 @@ class MatchSelectionScreen extends StatelessWidget {
             date: match['date'] ?? '',
             time: '15:30',
             sportsName: 'Football',
+            location: 'Stadium',
             showCreateTeamButton:
                 true, // Show button only on MatchSelectionScreen
           );
