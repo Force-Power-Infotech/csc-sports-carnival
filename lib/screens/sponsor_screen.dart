@@ -146,7 +146,17 @@ class SponsorCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                sponsor.description ?? 'No description',
+                sponsor.sponsorType ?? '',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              Text(
+                sponsor.description ?? '',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],

@@ -60,6 +60,7 @@ class SponsorsDetails {
   String? type1;
   String? phone;
   String? companyProfile;
+  String? sponsorType;
 
   SponsorsDetails(
       {this.id,
@@ -76,7 +77,8 @@ class SponsorsDetails {
       this.type,
       this.type1,
       this.phone,
-      this.companyProfile});
+      this.companyProfile,
+      this.sponsorType});
 
   SponsorsDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,6 +96,7 @@ class SponsorsDetails {
     type1 = json['type1'];
     phone = json['phone'];
     companyProfile = json['company_profile'];
+    sponsorType = json['sponsor_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -113,6 +116,7 @@ class SponsorsDetails {
     data['type1'] = type1;
     data['phone'] = phone;
     data['company_profile'] = companyProfile;
+    data['sponsor_type'] = sponsorType;
     return data;
   }
 }

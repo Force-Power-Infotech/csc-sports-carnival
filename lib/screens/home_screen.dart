@@ -232,6 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
               streamImages: streamImages,
               streamLinks: streamLinks,
             ),
+            SizedBox(
+              height: 100,
+            ),
           ],
         ),
       ),
