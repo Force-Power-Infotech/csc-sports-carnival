@@ -8,6 +8,7 @@ import 'package:rpgl/screens/committee_screen.dart';
 import 'package:rpgl/screens/copd_new.dart';
 import 'package:rpgl/screens/copd_screen.dart';
 import 'package:rpgl/screens/gallery_screen.dart';
+import 'package:rpgl/screens/login_screen.dart';
 import 'package:rpgl/screens/ownersandteams_screen.dart';
 import 'package:rpgl/screens/play_along_screen.dart';
 import 'package:rpgl/screens/refereAndMarshal_screen.dart';
@@ -145,76 +146,27 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
               ),
             );
           } else {
-            // Handle cases where member_id is null or empty by showing a modern alert dialog
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.warning_amber_rounded,
-                          color: Colors.redAccent,
-                          size: 50,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Login Required',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'You need to log in to Captains Room to enter here.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Dismiss the dialog
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 12),
-                          ),
-                          child: Text(
-                            'OK',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginScreen(
+                  isFromLogin: false,
+                ),
+              ),
             );
           }
         },
       ),
+      // ButtonConfig(
+      //   imagePath: 'assets/images/gallery.png',
+      //   text: 'Scan ME',
+      //   onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => GalleryScreen()),
+      //   );
+      // },
+      // ),
     ];
   }
 

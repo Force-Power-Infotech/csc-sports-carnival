@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rpgl/bases/api/sponsor.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/widgets/CustomWebView.dart';
+import 'package:rpgl/widgets/bottomModal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SponsorScreen extends StatefulWidget {
@@ -100,28 +101,26 @@ class SponsorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 8.0,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: InkWell(
         onTap: () {
           if (sponsor.website != null && sponsor.website!.isNotEmpty) {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) {
-                return Container(
-                  height:
-                      MediaQuery.of(context).size.height * 0.9, // 90% height
-                  child: CustomWebView(
-                    initialUrl: sponsor.website!,
-                    // title: sponsor.sponsor ?? 'Website',
-                  ),
-                );
-              },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WebViewScreen(url: sponsor.website!)),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -168,7 +167,6 @@ class SponsorCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              // const SizedBox(height: 8),
               Text(
                 sponsor.sponsorType ?? '',
                 style: TextStyle(

@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/bases/themes.dart';
+import 'package:rpgl/screens/captainsRoom_screen.dart';
 import 'package:rpgl/screens/leaderboard_screen.dart';
 import 'package:rpgl/screens/leaderboard_webview_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
@@ -19,6 +23,30 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  String? member_id = '';
+  OwnerLoginAPI? ownerLoginAPI;
+  // List<ButtonConfig> buttons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    readDataLocally();
+  }
+
+  readDataLocally() async {
+    ownerLoginAPI = await OwnerLoginAPI.readDataLocally();
+    if (ownerLoginAPI != null && ownerLoginAPI!.participantData != null) {
+      setState(() {
+        member_id = ownerLoginAPI!.participantData!.memberId.toString();
+        print('memberid----$member_id');
+        // initializeButtons(); // Initialize buttons after getting member_id
+      });
+    } else {
+      // initializeButtons(); // Initialize buttons if member_id is null
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,19 +110,47 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                       ),
                     ),
                   ),
-                  buildNavItem(
-                    context,
-                    Icons.person,
-                    "Captain's Room",
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(
-                          isFromLogin: true,
+                  buildNavItem(context, Icons.person, "Captain's Room",
+                      () async {
+                    // Fetch the data when the button is clicked
+                    await readDataLocally();
+
+                    // After fetching the data, navigate to the PlayAlongScreen
+                    if (ownerLoginAPI?.participantData?.memberType == 'O') {
+                      log('Owner');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CaptainsRoomScreen(
+                            teamId:
+                                ownerLoginAPI!.participantData?.teamId ?? '',
+                            teamImage:
+                                ownerLoginAPI!.participantData?.teamImage ?? '',
+                            teamName:
+                                ownerLoginAPI!.participantData?.teamName ?? '',
+                            ownerName:
+                                ownerLoginAPI!.participantData?.memberName ??
+                                    '',
+                            ownerid:
+                                ownerLoginAPI!.participantData?.memberId ?? '',
+                            ownerimage: ownerLoginAPI!.participantImage ?? '',
+                            participantdetails:
+                                ownerLoginAPI!.participantDetails,
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                      );
+                    } else {
+                      log('Not Owner');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(
+                            isFromLogin: true,
+                          ),
+                        ),
+                      );
+                    }
+                  }),
                 ],
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rpgl/bases/api/bannerImage.dart';
 import 'package:rpgl/bases/api/homescreen.dart'; // Import the API file
 import 'package:rpgl/bases/themes.dart';
+import 'package:rpgl/screens/Profile_screen.dart';
 import 'package:rpgl/screens/notification_screen.dart';
 import 'package:rpgl/widgets/BottomNavigationBar.dart';
 import 'package:rpgl/widgets/ScoreCarousel.dart';
@@ -138,17 +139,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 Positioned(
                   top: 50,
                   right: 10,
-                  child: IconButton(
-                    icon: const Icon(Icons.notifications),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationScreen(),
-                        ),
-                      );
-                    },
-                    color: Colors.white,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notifications),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationScreen(),
+                            ),
+                          );
+                        },
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.person),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfileScreen(),
+                            ),
+                          );
+                        },
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
                 ),
                 Positioned(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rpgl/bases/api/copdnew.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/widgets/CustomWebView.dart';
+import 'package:rpgl/widgets/bottomModal.dart';
 
 class Copdnew extends StatefulWidget {
   @override
@@ -35,26 +36,9 @@ class _CopdnewState extends State<Copdnew> {
   }
 
   void showWebView(BuildContext context, String url) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: const Icon(Icons.close, color: Colors.black),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            centerTitle: true,
-            elevation: 1,
-          ),
-          body: CustomWebView(
-            initialUrl: url,
-          ),
-        ),
-      ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WebViewScreen(url: url)),
     );
   }
 
