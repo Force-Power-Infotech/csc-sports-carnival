@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rpgl/widgets/CustomWebView.dart';
+import 'package:rpgl/widgets/bottomModal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:rpgl/bases/api/gallery.dart';
 import 'package:rpgl/bases/themes.dart';
@@ -18,53 +19,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
     galleryFuture = AlbumListList.pdflist();
   }
 
-  void _openWebViewModal(String url) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.95,
-          minChildSize: 0.9,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    blurRadius: 10,
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  // Close button on the top right corner
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        color: Colors.black,
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
-                  ),
-                  Expanded(child: CustomWebView(initialUrl: url)),
-                ],
-              ),
-            );
-          },
-        );
-      },
+  // To navigate to this screen, update the _openWebViewScreen method as follows:
+  void _openWebViewScreen(String url) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WebViewScreen(url: url)),
     );
   }
 
@@ -131,7 +90,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       var album = albums[index];
                       return GestureDetector(
                         onTap: () {
-                          _openWebViewModal(album.theLink ?? '');
+                          _openWebViewScreen(album.theLink ?? '');
                         },
                         child: Card(
                           shape: RoundedRectangleBorder(

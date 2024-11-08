@@ -200,26 +200,27 @@ class CommitteeMember extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      _makePhoneCall(phoneNumber);
-                    },
-                    icon: const Icon(Icons.call),
-                    color: AppThemes.getBackground(),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _sendWhatsApp('${wpNumber}', 'Hello $name');
-                      // _sendWhatsApp('8420474756', 'Hello $name');
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/whatsapp.svg',
-                      color: Colors.green,
-                      semanticsLabel: 'WhatsApp Icon',
-                      height: 24, // Set your desired height
-                      width: 24, // Set your desired width
+                  if (phoneNumber != null && phoneNumber.trim().isNotEmpty)
+                    IconButton(
+                      onPressed: () {
+                        _makePhoneCall(phoneNumber);
+                      },
+                      icon: const Icon(Icons.call),
+                      color: AppThemes.getBackground(),
                     ),
-                  )
+                  if (wpNumber != null && wpNumber.trim().isNotEmpty)
+                    IconButton(
+                      onPressed: () {
+                        _sendWhatsApp(wpNumber, 'Hello $name');
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/images/whatsapp.svg',
+                        color: Colors.green,
+                        semanticsLabel: 'WhatsApp Icon',
+                        height: 24, // Set your desired height
+                        width: 24, // Set your desired width
+                      ),
+                    ),
                 ],
               ),
             ],
