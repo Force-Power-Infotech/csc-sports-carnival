@@ -11,6 +11,7 @@ class OwnerLoginAPI {
   String? adminStatus;
   String? participantImage;
   ParticipantData? participantData;
+  List<ParticipantDetails>? participantDetails;
   String? showMatchInLive;
   String? bothTeamParticipantSet;
   String? myTeamAdminName;
@@ -25,6 +26,7 @@ class OwnerLoginAPI {
       this.adminStatus,
       this.participantImage,
       this.participantData,
+      this.participantDetails,
       this.showMatchInLive,
       this.bothTeamParticipantSet,
       this.myTeamAdminName,
@@ -42,7 +44,12 @@ class OwnerLoginAPI {
         ? ParticipantData.fromJson(
             Map<String, dynamic>.from(json['participant_data']))
         : null;
-
+    if (json['participant_details'] != null) {
+      participantDetails = <ParticipantDetails>[];
+      json['participant_details'].forEach((v) {
+        participantDetails!.add(new ParticipantDetails.fromJson(v));
+      });
+    }
     showMatchInLive = json['show_match_in_live'];
     bothTeamParticipantSet = json['both_team_participant_set'];
     myTeamAdminName = json['my_team_admin_name'];
@@ -60,6 +67,10 @@ class OwnerLoginAPI {
     data['participant_image'] = participantImage;
     if (participantData != null) {
       data['participant_data'] = participantData!.toJson();
+    }
+    if (this.participantDetails != null) {
+      data['participant_details'] =
+          this.participantDetails!.map((v) => v.toJson()).toList();
     }
     data['show_match_in_live'] = showMatchInLive;
     data['both_team_participant_set'] = bothTeamParticipantSet;
@@ -179,6 +190,28 @@ class ParticipantData {
     data['member_type'] = memberType;
     data['admin_status'] = adminStatus;
     data['team_id'] = teamId;
+    return data;
+  }
+}
+
+class ParticipantDetails {
+  String? id;
+  String? sportsName;
+  String? sportsLogo;
+
+  ParticipantDetails({this.id, this.sportsName, this.sportsLogo});
+
+  ParticipantDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    sportsName = json['sports_name'];
+    sportsLogo = json['sports_logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['sports_name'] = this.sportsName;
+    data['sports_logo'] = this.sportsLogo;
     return data;
   }
 }

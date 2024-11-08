@@ -12,6 +12,7 @@ class CaptainsRoomScreen extends StatefulWidget {
   final String ownerName; // This can be a file path or URL
   final String ownerid; // This can be a file path or URL
   final String ownerimage; // This can be a file path or URL
+  final List<ParticipantDetails>? participantdetails;
 
   const CaptainsRoomScreen(
       {super.key,
@@ -20,7 +21,8 @@ class CaptainsRoomScreen extends StatefulWidget {
       required this.teamName,
       required this.ownerName,
       required this.ownerid,
-      required this.ownerimage});
+      required this.ownerimage,
+      required this.participantdetails});
   @override
   _CaptainsRoomScreenState createState() => _CaptainsRoomScreenState();
 }
@@ -186,7 +188,10 @@ class _CaptainsRoomScreenState extends State<CaptainsRoomScreen> {
                           color: Colors.grey[700],
                         ),
                       ),
-                      SportsButtonList(), // Add the sports buttons here
+                      SportsButtonList(
+                          participantdetails: widget
+                              .participantdetails), // Add the sports buttons here
+                      // Add the sports buttons here
                     ],
                   ),
                 ),

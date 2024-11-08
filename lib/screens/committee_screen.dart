@@ -9,44 +9,70 @@ class CommitteeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppThemes.getBackground(),
       appBar: AppBar(
-        title: Text(
-          'Committee',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        automaticallyImplyLeading: false,
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Committee',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () {
+              // Handle close action
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+        backgroundColor: AppThemes.getBackground(),
+        elevation: 1,
       ),
-      body: FutureBuilder<Committee>(
-        future: CommitteeDetails.committeeList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return Center(child: Text('No data available'));
-          }
+      body: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+        ),
+        child: Container(
+          color: Colors.grey[100],
+          child: FutureBuilder<Committee>(
+            future: CommitteeDetails.committeeList(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData) {
+                return Center(child: Text('No data available'));
+              }
 
-          var committees = snapshot.data?.committeeDetails?.committees ?? {};
+              var committees =
+                  snapshot.data?.committeeDetails?.committees ?? {};
 
-          return ListView(
-            children: committees.entries.map((entry) {
-              var committeeName = entry.key;
-              var members = entry.value;
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: ListView(
+                  children: committees.entries.map((entry) {
+                    var committeeName = entry.key;
+                    var members = entry.value;
 
-              return CommitteeSection(
-                title: committeeName,
-                members: members,
+                    return CommitteeSection(
+                      title: committeeName,
+                      members: members,
+                    );
+                  }).toList(),
+                ),
               );
-            }).toList(),
-          );
-        },
+            },
+          ),
+        ),
       ),
     );
   }

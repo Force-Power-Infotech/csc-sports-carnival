@@ -71,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ownerName: participantData.memberName ?? '',
             ownerid: participantData.memberId ?? '',
             ownerimage: storedData.participantImage ?? '',
+            participantdetails: storedData.participantDetails,
           ),
         ),
       );

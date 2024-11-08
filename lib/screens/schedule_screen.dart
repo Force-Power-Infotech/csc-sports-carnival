@@ -66,159 +66,186 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppThemes.getBackground(),
       appBar: AppBar(
-        title: const Text(
-          'Schedule',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        automaticallyImplyLeading: false,
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Schedule',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () {
+              // Handle close action
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+        backgroundColor: AppThemes.getBackground(),
+        elevation: 1,
       ),
-      body: Container(
-        color: Colors.white,
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black, // Black loader color
-                ),
-              )
-            : options.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.event_busy,
-                          color: Colors.grey.shade400,
-                          size: 80,
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'No Match Scheduled',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Stay tuned for upcoming matches!',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _fetchScheduleData,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
-                            backgroundColor: AppThemes.getBackground(),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: const Text(
-                            'Refresh',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: options.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedIndex = index;
-                                  _pageController.animateToPage(
-                                    index,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                });
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                  border: _selectedIndex == index
-                                      ? Border(
-                                          bottom: BorderSide(
-                                            color: AppThemes.getBackground(),
-                                            width: 2.0,
-                                          ),
-                                        )
-                                      : null,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    options[index],
-                                    style: TextStyle(
-                                      color: _selectedIndex == index
-                                          ? AppThemes.getBackground()
-                                          : Colors.black,
-                                      fontWeight: _selectedIndex == index
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
-                                  ),
+      body: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+        ),
+        child: Container(
+          color: Colors.grey[100],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: Colors.white,
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black, // Black loader color
+                      ),
+                    )
+                  : options.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.event_busy,
+                                color: Colors.grey.shade400,
+                                size: 80,
+                              ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                'No Match Scheduled',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
                                 ),
                               ),
-                            );
-                          },
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Stay tuned for upcoming matches!',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: _fetchScheduleData,
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12),
+                                  backgroundColor: AppThemes.getBackground(),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Refresh',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: options.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedIndex = index;
+                                        _pageController.animateToPage(
+                                          index,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: BoxDecoration(
+                                        border: _selectedIndex == index
+                                            ? Border(
+                                                bottom: BorderSide(
+                                                  color:
+                                                      AppThemes.getBackground(),
+                                                  width: 2.0,
+                                                ),
+                                              )
+                                            : null,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          options[index],
+                                          style: TextStyle(
+                                            color: _selectedIndex == index
+                                                ? AppThemes.getBackground()
+                                                : Colors.black,
+                                            fontWeight: _selectedIndex == index
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Expanded(
+                              child: PageView.builder(
+                                controller: _pageController,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _selectedIndex = index;
+                                  });
+                                },
+                                itemCount: matches.length,
+                                itemBuilder: (context, index) {
+                                  return ListView.builder(
+                                    itemCount: matches[index].length,
+                                    itemBuilder: (context, matchIndex) {
+                                      final match = matches[index][matchIndex];
+                                      return MatchCard(
+                                        matchNo: match['matchNo']!,
+                                        logoA: match['logoA']!,
+                                        teamA: match['teamA']!,
+                                        logoB: match['logoB']!,
+                                        teamB: match['teamB']!,
+                                        date: match['date']!,
+                                        time: match['time']!,
+                                        sportsName: match['sports_name']!,
+                                        location: match['location'] ?? '',
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: PageView.builder(
-                          controller: _pageController,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                          itemCount: matches.length,
-                          itemBuilder: (context, index) {
-                            return ListView.builder(
-                              itemCount: matches[index].length,
-                              itemBuilder: (context, matchIndex) {
-                                final match = matches[index][matchIndex];
-                                return MatchCard(
-                                  matchNo: match['matchNo']!,
-                                  logoA: match['logoA']!,
-                                  teamA: match['teamA']!,
-                                  logoB: match['logoB']!,
-                                  teamB: match['teamB']!,
-                                  date: match['date']!,
-                                  time: match['time']!,
-                                  sportsName: match['sports_name']!,
-                                  location: match['location'] ?? '',
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+            ),
+          ),
+        ),
       ),
     );
   }
