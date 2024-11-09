@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/screens/match_selection_screen.dart';
+import 'package:rpgl/widgets/bottomModal.dart';
 
-class SportsButtonList extends StatelessWidget {
+class SportsButtonList extends StatefulWidget {
   final List<ParticipantDetails>? participantdetails;
 
   // Constructor to accept participant details
@@ -10,6 +11,31 @@ class SportsButtonList extends StatelessWidget {
     Key? key,
     required this.participantdetails,
   }) : super(key: key);
+
+  @override
+  State<SportsButtonList> createState() => _SportsButtonListState();
+}
+
+class _SportsButtonListState extends State<SportsButtonList> {
+  String? member_id = '';
+  OwnerLoginAPI? ownerLoginAPI;
+
+  @override
+  void initState() {
+    super.initState();
+    readDataLocally();
+  }
+
+  readDataLocally() async {
+    ownerLoginAPI = await OwnerLoginAPI.readDataLocally();
+    if (ownerLoginAPI != null && ownerLoginAPI!.participantData != null) {
+      setState(() {
+        member_id = ownerLoginAPI!.participantData!.memberId.toString();
+      });
+    } else {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +51,9 @@ class SportsButtonList extends StatelessWidget {
         mainAxisSpacing: 16.0,
         childAspectRatio: 0.85,
       ),
-      itemCount: participantdetails?.length,
+      itemCount: widget.participantdetails?.length,
       itemBuilder: (BuildContext context, int index) {
-        final sport = participantdetails?[index];
+        final sport = widget.participantdetails?[index];
 
         return GestureDetector(
           onTap: () {
@@ -39,6 +65,13 @@ class SportsButtonList extends StatelessWidget {
             //     ),
             //   ),
             // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WebViewScreen(
+                      url:
+                          'https://sports.forcempower.com/scorecard/captain_make_my_pair.php?member_id=$member_id&sports_id=${sport?.id ?? ''}')),
+            );
           },
           child: Card(
             elevation: 6,
@@ -54,7 +87,7 @@ class SportsButtonList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [Colors.blueAccent, Colors.lightBlueAccent],
@@ -72,7 +105,8 @@ class SportsButtonList extends StatelessWidget {
                           width: 40,
                           height: 40,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Icon(
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
                             Icons.error,
                             color: Colors.red,
                           ),

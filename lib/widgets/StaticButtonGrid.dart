@@ -196,65 +196,71 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
     double fontSize = screenWidth < 360
         ? baseFontSize * 0.8
         : baseFontSize; // Adjust for smaller screens
-
+// log
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          childAspectRatio: 1.0, // Keeps buttons square
-        ),
-        itemCount: buttons.length,
-        itemBuilder: (context, index) {
-          final button = buttons[index];
-          return Card(
-            color: Colors.white,
-            elevation: 6,
-            margin: const EdgeInsets.all(8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0), // More rounded corners
-            ),
-            child: InkWell(
-              onTap: button.onTap ??
-                  () {}, // Provide a default empty function if onTap is null
-              child: Padding(
-                padding:
-                    const EdgeInsets.all(8.0), // Padding around the content
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: SizedBox(
-                        width: screenWidth * 0.15, // Make icon size responsive
-                        height: screenWidth * 0.15,
-                        child: Image.asset(
-                          button.imagePath,
-                          fit: BoxFit.contain,
-                          color: AppThemes.getBackground(), // Icon color
+      child: SizedBox(
+        // width: screenWidth,
+        // height: ((buttons.length / 4) * screenWidth * 0.15) + 16,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            childAspectRatio: 1.0, // Keeps buttons square
+          ),
+          itemCount: buttons.length,
+          itemBuilder: (context, index) {
+            final button = buttons[index];
+            return Card(
+              color: Colors.white,
+              elevation: 6,
+              margin: const EdgeInsets.all(8),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(15.0), // More rounded corners
+              ),
+              child: InkWell(
+                onTap: button.onTap ??
+                    () {}, // Provide a default empty function if onTap is null
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(8.0), // Padding around the content
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: SizedBox(
+                          width:
+                              screenWidth * 0.15, // Make icon size responsive
+                          height: screenWidth * 0.15,
+                          child: Image.asset(
+                            button.imagePath,
+                            fit: BoxFit.contain,
+                            color: AppThemes.getBackground(), // Icon color
+                          ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        button.text,
-                        style: TextStyle(
-                          fontSize: 10, // Use responsive font size
-                          fontWeight: FontWeight.w600,
+                      Flexible(
+                        child: Text(
+                          button.text,
+                          style: TextStyle(
+                            fontSize: 10, // Use responsive font size
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow
+                              .ellipsis, // Ensure text doesn't overflow
+                          maxLines: 2, // Limit text to 2 lines if necessary
                         ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow
-                            .ellipsis, // Ensure text doesn't overflow
-                        maxLines: 2, // Limit text to 2 lines if necessary
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -47,7 +47,8 @@ class OwnerLoginAPI {
     if (json['participant_details'] != null) {
       participantDetails = <ParticipantDetails>[];
       json['participant_details'].forEach((v) {
-        participantDetails!.add(new ParticipantDetails.fromJson(v));
+        participantDetails!
+            .add(ParticipantDetails.fromJson(v.cast<String, dynamic>()));
       });
     }
     showMatchInLive = json['show_match_in_live'];

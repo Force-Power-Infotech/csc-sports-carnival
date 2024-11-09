@@ -17,6 +17,7 @@ class _ScanMeScreenState extends State<ScanMeScreen> {
   String? qrText;
   String? member_id = '';
   OwnerLoginAPI? ownerLoginAPI;
+  bool _scanned = false; // Flag to ensure only one scan
 
   @override
   void initState() {
@@ -112,10 +113,12 @@ class _ScanMeScreenState extends State<ScanMeScreen> {
                 controller: scannerController,
                 onDetect: (BarcodeCapture barcodeCapture) {
                   final barcode = barcodeCapture.barcodes.first;
-                  if (barcode.rawValue != null) {
+                  if (barcode.rawValue != null && !_scanned) {
                     setState(() {
+                      _scanned =
+                          true; // Set flag to true to avoid multiple scans
                       qrText = barcode.rawValue;
-                      log('QR Text: $qrText anddddd $member_id');
+                      log('QR Text: $qrText and member_id: $member_id');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -124,7 +127,12 @@ class _ScanMeScreenState extends State<ScanMeScreen> {
                                 'https://sports.forcempower.com/about_details/scan_qr_for_prize.php?player_id=$member_id&prize_id=$qrText',
                           ),
                         ),
-                      );
+                      ).then((_) {
+                        // Reset scanned flag on return from navigation
+                        setState(() {
+                          _scanned = false;
+                        });
+                      });
                     });
                   }
                 },
