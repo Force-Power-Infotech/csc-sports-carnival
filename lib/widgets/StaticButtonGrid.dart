@@ -12,6 +12,7 @@ import 'package:rpgl/screens/login_screen.dart';
 import 'package:rpgl/screens/ownersandteams_screen.dart';
 import 'package:rpgl/screens/play_along_screen.dart';
 import 'package:rpgl/screens/refereAndMarshal_screen.dart';
+import 'package:rpgl/screens/scanme_screen.dart';
 import 'package:rpgl/screens/sponsor_screen.dart';
 import 'package:rpgl/screens/statistics_webview_screen.dart';
 
@@ -72,7 +73,7 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
       ),
       ButtonConfig(
         imagePath: 'assets/images/committee.png',
-        text: 'Committee',
+        text: 'Organising Committee',
         onTap: () {
           Navigator.push(
             context,
@@ -157,16 +158,33 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
           }
         },
       ),
-      // ButtonConfig(
-      //   imagePath: 'assets/images/gallery.png',
-      //   text: 'Scan ME',
-      //   onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => GalleryScreen()),
-      //   );
-      // },
-      // ),
+      ButtonConfig(
+        imagePath: 'assets/images/scan.png',
+        text: 'Scan me',
+        onTap: () async {
+          // Fetch the data when the button is clicked
+          await readDataLocally();
+
+          // After fetching the data, navigate to the PlayAlongScreen
+          if (member_id != null && member_id!.isNotEmpty) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScanMeScreen(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginScreen(
+                  isFromLogin: false,
+                ),
+              ),
+            );
+          }
+        },
+      ),
     ];
   }
 

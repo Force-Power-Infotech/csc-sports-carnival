@@ -125,7 +125,7 @@ class _CopdnewState extends State<Copdnew> {
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeInOut,
                               decoration: BoxDecoration(
-                                color: Colors.blue.shade700,
+                                color: AppThemes.getBackground(),
                                 borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
                                   BoxShadow(

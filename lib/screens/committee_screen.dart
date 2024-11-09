@@ -15,7 +15,7 @@ class CommitteeScreen extends StatelessWidget {
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'Committee',
+            'Organising Committee',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -186,17 +186,17 @@ class CommitteeMember extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Flexible(
-                child: Text(
-                  designation,
-                  style: const TextStyle(
-                    fontSize: 8,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w800,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              // Flexible(
+              //   child: Text(
+              //     designation,
+              //     style: const TextStyle(
+              //       fontSize: 8,
+              //       color: Colors.black,
+              //       fontWeight: FontWeight.w800,
+              //     ),
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
