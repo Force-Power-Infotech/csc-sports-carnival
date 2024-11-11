@@ -24,7 +24,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   String? member_id = '';
-  OwnerLoginAPI? ownerLoginAPI;
+  late OwnerLoginAPI? ownerLoginAPI;
   // List<ButtonConfig> buttons = [];
 
   @override
@@ -35,16 +35,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   readDataLocally() async {
     ownerLoginAPI = await OwnerLoginAPI.readDataLocally();
-    if (ownerLoginAPI != null && ownerLoginAPI!.participantData != null) {
-      setState(() {
-        member_id = ownerLoginAPI!.participantData!.memberId.toString();
-        print('memberid----$member_id');
-        // initializeButtons(); // Initialize buttons after getting member_id
-      });
-    } else {
-      // initializeButtons(); // Initialize buttons if member_id is null
-      setState(() {});
-    }
+
+    // if (ownerLoginAPI != null && ownerLoginAPI?.participantData != null) {
+    //   setState(() {
+    //     member_id = ownerLoginAPI?.participantData?.memberId.toString();
+    //     print('memberid----$member_id');
+    //     // initializeButtons(); // Initialize buttons after getting member_id
+    //   });
+    // } else {
+    //   // initializeButtons(); // Initialize buttons if member_id is null
+    //   setState(() {});
+    // }
   }
 
   @override
@@ -114,31 +115,38 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                       () async {
                     // Fetch the data when the button is clicked
                     await readDataLocally();
+                    // show every detail of the owner in a popup dialog first
 
                     // After fetching the data, navigate to the PlayAlongScreen
-                    if (ownerLoginAPI?.participantData?.memberType == 'O') {
-                      log('Owner');
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CaptainsRoomScreen(
-                            teamId:
-                                ownerLoginAPI!.participantData?.teamId ?? '',
-                            teamImage:
-                                ownerLoginAPI!.participantData?.teamImage ?? '',
-                            teamName:
-                                ownerLoginAPI!.participantData?.teamName ?? '',
-                            ownerName:
-                                ownerLoginAPI!.participantData?.memberName ??
-                                    '',
-                            ownerid:
-                                ownerLoginAPI!.participantData?.memberId ?? '',
-                            ownerimage: ownerLoginAPI!.participantImage ?? '',
-                            participantdetails:
-                                ownerLoginAPI!.participantDetails,
+                    if (ownerLoginAPI != null) {
+                      if (ownerLoginAPI?.participantData?.memberType == 'O' ||
+                          ownerLoginAPI?.participantData?.memberType != '') {
+                        log('Owner');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CaptainsRoomScreen(
+                              teamId:
+                                  ownerLoginAPI?.participantData?.teamId ?? '',
+                              teamImage:
+                                  ownerLoginAPI?.participantData?.teamImage ??
+                                      '',
+                              teamName:
+                                  ownerLoginAPI?.participantData?.teamName ??
+                                      '',
+                              ownerName:
+                                  ownerLoginAPI?.participantData?.memberName ??
+                                      '',
+                              ownerid:
+                                  ownerLoginAPI?.participantData?.memberId ??
+                                      '',
+                              ownerimage: ownerLoginAPI?.participantImage ?? '',
+                              participantdetails:
+                                  ownerLoginAPI?.participantDetails,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     } else {
                       log('Not Owner');
                       Navigator.push(
