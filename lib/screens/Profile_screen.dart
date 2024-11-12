@@ -2,9 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/bases/themes.dart';
+import 'package:rpgl/screens/home_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  void _handleLogout() async {
+    // Perform your logout logic here, such as clearing session data
+
+    // Call the function to delete all data from Hive
+    await OwnerLoginAPI.deleteAllData();
+
+    // Navigate to the HomeScreen after logout
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +68,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Widget to build profile content when data is available
   Widget _buildProfileContent(
       BuildContext context, OwnerLoginAPI ownerLoginAPI) {
     return ClipRRect(
@@ -60,9 +76,9 @@ class ProfileScreen extends StatelessWidget {
         topRight: Radius.circular(30),
       ),
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFF7F8FA), Color(0xFFEAEFF2)],
+            colors: [AppThemes.brc_textcolor, AppThemes.getBackground()],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -88,8 +104,6 @@ class ProfileScreen extends StatelessWidget {
                     color: Color(0xFF333333),
                   ),
                 ),
-                // const SizedBox(height: 8),
-
                 const SizedBox(height: 40),
                 Card(
                   shape: RoundedRectangleBorder(
@@ -123,7 +137,28 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 600),
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.redAccent,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 32.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: _handleLogout,
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

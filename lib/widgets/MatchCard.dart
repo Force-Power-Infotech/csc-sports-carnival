@@ -224,39 +224,63 @@ class MatchCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          if (showResult && result != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.greenAccent.shade700,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          Colors.greenAccent.withOpacity(0.3),
-                                      spreadRadius: 1,
-                                      blurRadius: 6,
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  'Result: $result',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ],
                   ),
                 ),
+                // Modernized result section within the build method
+                if (showResult && result != null)
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.green.shade400,
+                            Colors.greenAccent.shade700
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.green.withOpacity(0.3),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle,
+                              color: Colors.white, size: 18),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Result: $result',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black26,
+                                  blurRadius: 2,
+                                  offset: Offset(0.5, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
               ],
             ),
           ],

@@ -51,7 +51,7 @@ class _CopdnewState extends State<Copdnew> {
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'COPD',
+            'Rules & Regulations',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,

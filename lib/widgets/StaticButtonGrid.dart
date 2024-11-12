@@ -62,7 +62,7 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
       ),
       ButtonConfig(
         imagePath: 'assets/images/copd.png',
-        text: 'COPD',
+        text: 'Rules & Regulations',
         onTap: () {
           Navigator.push(
             context,
