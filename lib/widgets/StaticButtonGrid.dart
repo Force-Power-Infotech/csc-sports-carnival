@@ -7,6 +7,7 @@ import 'package:rpgl/screens/about_screen.dart';
 import 'package:rpgl/screens/committee_screen.dart';
 import 'package:rpgl/screens/copd_new.dart';
 import 'package:rpgl/screens/copd_screen.dart';
+import 'package:rpgl/screens/event_screen.dart';
 import 'package:rpgl/screens/gallery_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
 import 'package:rpgl/screens/ownersandteams_screen.dart';
@@ -15,6 +16,7 @@ import 'package:rpgl/screens/refereAndMarshal_screen.dart';
 import 'package:rpgl/screens/scanme_screen.dart';
 import 'package:rpgl/screens/sponsor_screen.dart';
 import 'package:rpgl/screens/statistics_webview_screen.dart';
+import 'package:rpgl/widgets/bottomModal.dart';
 
 class StaticButtonGrid extends StatefulWidget {
   const StaticButtonGrid({super.key});
@@ -185,6 +187,44 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
           }
         },
       ),
+      ButtonConfig(
+        imagePath: 'assets/images/event.png',
+        text: 'Events',
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EventScreen()),
+          );
+        },
+      ),
+      ButtonConfig(
+        imagePath: 'assets/images/tv.png',
+        text: 'Highlights',
+        onTap: () {
+          showDialog(
+            context: context,
+            barrierDismissible:
+                false, // Prevents closing the dialog by tapping outside
+            builder: (BuildContext context) {
+              Future.delayed(const Duration(seconds: 3), () {
+                Navigator.pop(
+                    context); // Close the image dialog after 5 seconds
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebViewScreen(
+                      url:
+                          'https://sports.forcempower.com/about_details/highlights.php',
+                    ),
+                  ),
+                );
+              });
+
+              return FullScreenImageDialog();
+            },
+          );
+        },
+      ),
     ];
   }
 
@@ -276,4 +316,20 @@ class ButtonConfig {
     required this.text,
     required this.onTap, // Initialize onTap
   });
+}
+
+class FullScreenImageDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: EdgeInsets.zero,
+      backgroundColor: Colors.black,
+      child: SizedBox.expand(
+        child: Image.asset(
+          'assets/images/highlights.gif', // Path to the fullscreen image
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
 }

@@ -27,4 +27,6 @@ class Webservice {
 
   static const String ws_assign_as_admin_by_owner =
       "ws_assign_as_admin_by_owner.php";
+  static const String versionCheck = "show_app_version.php";
+  static const String event_list = "event_list.php";
 }
