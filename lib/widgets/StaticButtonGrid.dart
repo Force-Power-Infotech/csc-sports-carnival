@@ -201,27 +201,14 @@ class _StaticButtonGridState extends State<StaticButtonGrid> {
         imagePath: 'assets/images/tv.png',
         text: 'Highlights',
         onTap: () {
-          showDialog(
-            context: context,
-            barrierDismissible:
-                false, // Prevents closing the dialog by tapping outside
-            builder: (BuildContext context) {
-              Future.delayed(const Duration(seconds: 3), () {
-                Navigator.pop(
-                    context); // Close the image dialog after 5 seconds
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WebViewScreen(
-                      url:
-                          'https://sports.forcempower.com/about_details/highlights.php',
-                    ),
-                  ),
-                );
-              });
-
-              return FullScreenImageDialog();
-            },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WebViewScreen(
+                url:
+                    'https://sports.forcempower.com/about_details/highlights.php',
+              ),
+            ),
           );
         },
       ),
