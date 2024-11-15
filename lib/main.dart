@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:rpgl/bases/flagcheck.dart';
 import 'package:rpgl/screens/about_screen.dart';
 import 'package:rpgl/screens/committee_screen.dart';
 import 'package:rpgl/screens/home_screen.dart';
@@ -15,7 +16,13 @@ void main() async {
   await Hive.initFlutter(); // Initialize Hive with Flutter support
 
   await Hive.openBox('ownerLoginAPI'); // Open the Hive box
-
+  await Hive.openBox('flag'); // Open the Hive box
+  bool flagValue = await checkFlagValue(); // Check the flag value
+  if (!flagValue) {
+    // clear ownerLoginAPI box
+    await Hive.box('ownerLoginAPI').clear();
+    await setFlagValue(true); // Set the flag value
+  }
   runApp(const MyApp()); // Run the app
 }
 

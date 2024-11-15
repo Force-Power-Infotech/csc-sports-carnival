@@ -4,6 +4,7 @@ import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/screens/home_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
+import 'package:rpgl/widgets/DeleteAccountWidget.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -159,6 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                DeleteAccountWidget(
+                    memberId: ownerLoginAPI.participantData?.memberId ?? '')
               ],
             ),
           ),

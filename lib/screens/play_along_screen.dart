@@ -45,7 +45,7 @@ class PlayAlongScreen extends StatelessWidget {
           color: Colors.grey[100],
           child: CustomWebView(
             initialUrl:
-                'http://sports.forcempower.com/auth/play_along.php?member_id=${member_id}',
+                'https://sports.forcempower.com/auth/play_along.php?member_id=${member_id}',
           ),
         ),
       ),

@@ -29,4 +29,5 @@ class Webservice {
       "ws_assign_as_admin_by_owner.php";
   static const String versionCheck = "show_app_version.php";
   static const String event_list = "event_list.php";
+  static const String del_acc_api = "del_acc_api.php";
 }
