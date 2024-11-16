@@ -82,7 +82,7 @@ class OwnerLoginAPI {
   }
 
   static Future<OwnerLoginAPI> ownerlist(String phonenumber) async {
-    Uri url = Uri.parse("${Webservice.rootURL}${Webservice.ws_main_login_v2}");
+    Uri url = Uri.parse("${Webservice.rootURL}${Webservice.ws_main_login_v3}");
     final request = http.MultipartRequest('POST', url);
     print(url);
     request.fields.addAll({

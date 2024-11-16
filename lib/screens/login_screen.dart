@@ -67,9 +67,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> redirectToPlayalongRoom() async {
     // Retrieve stored data from Hive
     OwnerLoginAPI? storedData = await OwnerLoginAPI.readDataLocally();
+    log('redirectToPlayalongRoom');
+    log(storedData?.participantData == null ? 'null' : 'not null');
 
     if (storedData != null && storedData.participantData != null) {
       ParticipantData participantData = storedData.participantData!;
+      log(participantData.memberId ?? '');
+      log('redirectToPlayalongRoom IFF TRUE');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

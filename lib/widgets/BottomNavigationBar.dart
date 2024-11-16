@@ -119,8 +119,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
                     // After fetching the data, navigate to the PlayAlongScreen
                     if (ownerLoginAPI != null) {
-                      if (ownerLoginAPI?.participantData?.memberType == 'O' ||
-                          ownerLoginAPI?.participantData?.memberType != '') {
+                      log('Owner Login API: ${ownerLoginAPI?.participantData?.memberType}');
+                      if (ownerLoginAPI?.participantData?.memberType == 'O') {
                         log('Owner');
                         Navigator.push(
                           context,
@@ -146,17 +146,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                             ),
                           ),
                         );
-                      }
-                    } else {
-                      log('Not Owner');
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(
-                            isFromLogin: true,
+                      } else {
+                        log('Not Owner');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(
+                              isFromLogin: true,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     }
                   }),
                 ],
