@@ -5,6 +5,7 @@ import 'package:rpgl/bases/api/ownerLogin.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/screens/captainsRoom_screen.dart';
 import 'package:rpgl/screens/leaderboard_screen.dart';
+import 'package:rpgl/screens/leaderboard_screen_new.dart';
 import 'package:rpgl/screens/leaderboard_webview_screen.dart';
 import 'package:rpgl/screens/login_screen.dart';
 import 'package:rpgl/screens/ownersRoom_screen.dart';
@@ -82,10 +83,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LeaderboardWebViewScreen(),
-                        // builder: (context) => LeaderboardScreen(
-                        //   sponsorImageUrl: widget.sponsorImageUrl,
-                        // ),
+                        // builder: (context) => LeaderboardScreenNew(),
+                        // builder: (context) => LeaderboardWebViewScreen(),
+                        builder: (context) => LeaderboardScreen(
+                          sponsorImageUrl: widget.sponsorImageUrl,
+                        ),
                       ),
                     ),
                   ),

@@ -30,4 +30,6 @@ class Webservice {
   static const String versionCheck = "show_app_version.php";
   static const String event_list = "event_list.php";
   static const String del_acc_api = "del_acc_api.php";
+  static const String pn = "auth/push_test_for_android.php";
+  static const String leaderboard_overall_api = "leaderboard_overall_api.php";
 }

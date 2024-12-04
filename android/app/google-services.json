@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "193677807307",
+    "project_id": "sportspushnotification-b983c",
+    "storage_bucket": "sportspushnotification-b983c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193677807307:android:3088e1fd8c0420431b954e",
+        "android_client_info": {
+          "package_name": "com.forcempower.multisports"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFBZe_mbTb8kLEccpXTlgwiaO9jM2yGwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193677807307:android:118758008eab839e1b954e",
+        "android_client_info": {
+          "package_name": "com.forcepower.cscsportscarnival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFBZe_mbTb8kLEccpXTlgwiaO9jM2yGwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

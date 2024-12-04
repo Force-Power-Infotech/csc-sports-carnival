@@ -17,8 +17,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneNumberController = TextEditingController();
-  final List<TextEditingController> _otpControllers =
-      List.generate(4, (_) => TextEditingController());
+  // final List<TextEditingController> _otpControllers =
+  //     List.generate(4, (_) => TextEditingController());
+  final TextEditingController _otpControllers = TextEditingController();
+
   bool _showOtpField = false;
   String? _serverOtp;
 
@@ -112,8 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _submitOtp() async {
-    final enteredOtp =
-        _otpControllers.map((controller) => controller.text).join();
+    final enteredOtp = _otpControllers.text;
     log(enteredOtp);
     log(_serverOtp ?? '');
     if (enteredOtp == _serverOtp) {
@@ -206,48 +207,48 @@ class _LoginScreenState extends State<LoginScreen> {
                 cursorColor: Colors.black,
               ),
             if (_showOtpField)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(4, (index) {
-                  return Container(
-                    width: 50,
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: const BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: const BorderSide(color: Colors.black),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 20.0),
-                        counterText: '',
-                      ),
-                      maxLength: 1,
-                      cursorColor: Colors.black,
-                      onChanged: (value) {
-                        if (value.isEmpty) {
-                          if (index > 0) {
-                            FocusScope.of(context).previousFocus();
-                          }
-                        } else if (value.length == 1) {
-                          if (index < 3) {
-                            FocusScope.of(context).nextFocus();
-                          } else {
-                            FocusScope.of(context).unfocus();
-                          }
-                        }
-                      },
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                  controller: _otpControllers,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4, // Limit to 4 digits
+                  textAlign: TextAlign.center,
+                  cursorColor: Colors.black,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    letterSpacing: 40, // Adjust to control spacing
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide.none,
                     ),
-                  );
-                }),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 20.0),
+                    counterText: '', // Hides the counter
+                    hintText: 'Enter OTP',
+                    hintStyle: const TextStyle(
+                      letterSpacing: 0, // No extra spacing for hint
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    if (value.length == 4) {
+                      FocusScope.of(context)
+                          .unfocus(); // Dismiss keyboard when input is complete
+                    }
+                  },
+                ),
               ),
             if (_showOtpField)
               Align(

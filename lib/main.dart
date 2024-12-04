@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:rpgl/bases/api/firebase_api.dart';
 import 'package:rpgl/bases/flagcheck.dart';
 import 'package:rpgl/screens/about_screen.dart';
 import 'package:rpgl/screens/committee_screen.dart';
@@ -9,9 +12,17 @@ import 'package:rpgl/screens/splash_screen.dart';
 import 'package:rpgl/screens/sponsor_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart'; // Import the correct Hive package
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message: ${message.messageId}');
+}
+
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensures that plugin services are initialized before `runApp`
+  await Firebase.initializeApp();
+  await FirebaseAPI()
+      .initNotification(); // Request permission for notifications
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Hive.initFlutter(); // Initialize Hive with Flutter support
 

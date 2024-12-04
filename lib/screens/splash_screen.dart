@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:rpgl/bases/api/pushNotification.dart';
 import 'package:rpgl/bases/api/versioncheck.dart';
 import 'package:rpgl/bases/themes.dart';
 import 'package:rpgl/screens/home_screen.dart';
@@ -37,6 +38,17 @@ class _SplashScreenState extends State<SplashScreen>
     // Call the version check function
     _checkAppVersion();
     _getAppVersion();
+    sendPushNotification();
+  }
+
+  Future<void> sendPushNotification() async {
+    try {
+      final response = await PushnotficationAPI.pushnotification();
+      print('Notification Status: ${response.status}');
+      print('Notification Message: ${response.message}');
+    } catch (e) {
+      print('Error sending push notification: $e');
+    }
   }
 
   Future<void> _checkAppVersion() async {
