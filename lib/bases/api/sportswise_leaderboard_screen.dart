@@ -30,7 +30,7 @@ class SportsWiselbAPI {
     return data;
   }
 
-  static Future<SportsWiselbAPI> fetchOverallLeaderboard() async {
+  static Future<SportsWiselbAPI> fetchSportswiseeaderboard() async {
     Uri url =
         Uri.parse("${Webservice.rootURL}${Webservice.leaderboard_overall_api}");
     final request = http.MultipartRequest('POST', url);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rpgl/bases/themes.dart';
+import 'package:rpgl/bases/api/sportswise_leaderboard_screen.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class SportsWise extends StatefulWidget {
@@ -10,173 +10,133 @@ class SportsWise extends StatefulWidget {
 }
 
 class _SportsWiseState extends State<SportsWise> {
-  String _selectedSport = 'Football'; // Default selected sport
-
-  // Demo sports data
-  final Map<String, List<Map<String, dynamic>>> sportsData = {
-    'Football': [
-      {'Club': 'Team A', 'Points': 25, 'Wins': 8, 'Losses': 2, 'Draws': 1},
-      {'Club': 'Team B', 'Points': 18, 'Wins': 5, 'Losses': 3, 'Draws': 3},
-      {'Club': 'Team C', 'Points': 12, 'Wins': 3, 'Losses': 6, 'Draws': 2},
-    ],
-    'Basketball': [
-      {'Club': 'Team X', 'Points': 30, 'Wins': 10, 'Losses': 0, 'Draws': 0},
-      {'Club': 'Team Y', 'Points': 22, 'Wins': 7, 'Losses': 3, 'Draws': 0},
-      {'Club': 'Team Z', 'Points': 15, 'Wins': 5, 'Losses': 5, 'Draws': 0},
-    ],
-    'Cricket': [
-      {'Club': 'Team Alpha', 'Points': 40, 'Wins': 10, 'Losses': 2, 'Draws': 0},
-      {'Club': 'Team Beta', 'Points': 32, 'Wins': 8, 'Losses': 4, 'Draws': 0},
-      {'Club': 'Team Gamma', 'Points': 20, 'Wins': 5, 'Losses': 6, 'Draws': 1},
-    ],
-  };
-
-  late SportsDataSource _dataSource;
+  bool _isLoading = true;
+  String? _errorMessage;
+  List<dynamic> _sportsData = [];
+  String? _selectedSport;
+  List<Map<String, dynamic>> _currentTableData = []; // Initialize to empty list
+  List<String> _columns = []; // Initialize columns
 
   @override
   void initState() {
     super.initState();
-    _dataSource = SportsDataSource(sportsData[_selectedSport]!);
+    _fetchSportsData();
   }
 
-  void _updateTable(String sport) {
+  Future<void> _fetchSportsData() async {
     setState(() {
-      _selectedSport = sport;
-      _dataSource = SportsDataSource(sportsData[sport]!);
+      _isLoading = true;
+      _errorMessage = null;
+      _currentTableData = []; // Clear current data while loading
+      _columns = []; // Clear columns while loading
     });
+
+    try {
+      SportsWiselbAPI apiResponse =
+          await SportsWiselbAPI.fetchSportswiseeaderboard();
+
+      if (apiResponse.processSts == "YES" && apiResponse.sportsData != null) {
+        setState(() {
+          _sportsData = apiResponse.sportsData!;
+          _selectedSport = _sportsData.first['sports_name']; // Default sport
+          _updateTableData(); // Update data for default sport
+        });
+      } else {
+        throw Exception(apiResponse.processMsg ?? "Unknown error");
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _updateTableData() {
+    // Find data for the selected sport
+    final selectedSportData = _sportsData.firstWhere(
+      (sport) => sport['sports_name'] == _selectedSport,
+      orElse: () => null,
+    );
+
+    if (selectedSportData != null) {
+      _currentTableData = selectedSportData['sports_details']
+          .map<Map<String, dynamic>>((detail) => {
+                'team_name': selectedSportData['team_name'],
+                'team_image': selectedSportData['team_image'],
+                'sports_name': detail['sports_name'],
+                'sports_value': detail['sports_value'] ?? 'N/A',
+              })
+          .toList();
+
+      // Dynamically extract columns
+      if (_currentTableData.isNotEmpty) {
+        _columns = _currentTableData.first.keys.toList();
+      } else {
+        _columns = [];
+      }
+    } else {
+      _currentTableData = [];
+      _columns = [];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey[200],
       body: SafeArea(
-        child: Column(
-          children: [
-            // Dropdown for selecting sport
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: DropdownButton<String>(
-                  value: _selectedSport,
-                  isExpanded: true,
-                  underline: const SizedBox(),
-                  icon: Icon(Icons.arrow_drop_down,
-                      color: AppThemes.getBackground()),
-                  items: sportsData.keys
-                      .map((sport) => DropdownMenuItem<String>(
-                            value: sport,
-                            child: Text(
-                              sport,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      _updateTable(value);
-                    }
-                  },
-                ),
-              ),
-            ),
-            // Buttons for Groups and Teams
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle Groups button action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppThemes.getBackground(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _errorMessage != null
+                ? Center(child: Text('Error: $_errorMessage'))
+                : Column(
+                    children: [
+                      // Dropdown for selecting sport
+                      if (_sportsData.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: DropdownButton<String>(
+                            value: _selectedSport,
+                            isExpanded: true,
+                            items: _sportsData
+                                .map((sport) => DropdownMenuItem<String>(
+                                      value: sport['sports_name'],
+                                      child: Text(
+                                        sport['sports_name'] ?? '',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedSport = value;
+                                _updateTableData();
+                              });
+                            },
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      // DataGrid for displaying leaderboard
+                      Expanded(
+                        child: SfDataGrid(
+                          source: SportsDataSource(_currentTableData, _columns),
+                          columns: _columns
+                              .map((column) => GridColumn(
+                                    columnName: column,
+                                    label: _buildHeaderCell(column),
+                                  ))
+                              .toList(),
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          headerGridLinesVisibility: GridLinesVisibility.both,
+                          headerRowHeight: 60,
+                          rowHeight: 50,
+                        ),
                       ),
-                    ),
-                    child: const Text('Group A'),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle Teams button action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppThemes.getBackground(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: const Text('Group B'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            // DataGrid for displaying leaderboard
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    // color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: SfDataGrid(
-                      source: _dataSource,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      headerRowHeight: 60,
-                      rowHeight: 50,
-                      columns: [
-                        GridColumn(
-                          columnName: 'Club',
-                          label: _buildHeaderCell('Club'),
-                        ),
-                        GridColumn(
-                          columnName: 'Points',
-                          label: _buildHeaderCell('Points'),
-                        ),
-                        GridColumn(
-                          columnName: 'Wins',
-                          label: _buildHeaderCell('Wins'),
-                        ),
-                        GridColumn(
-                          columnName: 'Losses',
-                          label: _buildHeaderCell('Losses'),
-                        ),
-                        GridColumn(
-                          columnName: 'Draws',
-                          label: _buildHeaderCell('Draws'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -185,17 +145,9 @@ class _SportsWiseState extends State<SportsWise> {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: AppThemes.getBackground(),
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
       child: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     );
   }
@@ -203,16 +155,18 @@ class _SportsWiseState extends State<SportsWise> {
 
 class SportsDataSource extends DataGridSource {
   final List<Map<String, dynamic>> data;
+  final List<String> columns;
 
-  SportsDataSource(this.data) {
+  SportsDataSource(this.data, this.columns) {
     dataGridRows = data.map<DataGridRow>((item) {
-      return DataGridRow(cells: [
-        DataGridCell<String>(columnName: 'Club', value: item['Club']),
-        DataGridCell<int>(columnName: 'Points', value: item['Points']),
-        DataGridCell<int>(columnName: 'Wins', value: item['Wins']),
-        DataGridCell<int>(columnName: 'Losses', value: item['Losses']),
-        DataGridCell<int>(columnName: 'Draws', value: item['Draws']),
-      ]);
+      return DataGridRow(
+        cells: columns.map((column) {
+          return DataGridCell<String>(
+            columnName: column,
+            value: item[column]?.toString() ?? '',
+          );
+        }).toList(),
+      );
     }).toList();
   }
 
@@ -222,16 +176,13 @@ class SportsDataSource extends DataGridSource {
   List<DataGridRow> get rows => dataGridRows;
 
   @override
-  DataGridRowAdapter? buildRow(DataGridRow row) {
+  DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((cell) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            cell.value.toString(),
-            style: const TextStyle(fontSize: 14),
-          ),
+          child: Text(cell.value.toString()),
         );
       }).toList(),
     );
