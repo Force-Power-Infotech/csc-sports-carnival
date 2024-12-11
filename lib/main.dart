@@ -10,31 +10,42 @@ import 'package:rpgl/screens/home_screen.dart';
 import 'package:rpgl/screens/leaderboard_screen.dart';
 import 'package:rpgl/screens/splash_screen.dart';
 import 'package:rpgl/screens/sponsor_screen.dart';
-import 'package:hive_flutter/hive_flutter.dart'; // Import the correct Hive package
+import 'package:hive_flutter/hive_flutter.dart'; // Correct Hive package
 
+/// Background message handler for Firebase Messaging
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding
-      .ensureInitialized(); // Ensures that plugin services are initialized before `runApp`
-  await Firebase.initializeApp();
-  await FirebaseAPI()
-      .initNotification(); // Request permission for notifications
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+      .ensureInitialized(); // Ensures plugin services are initialized
 
-  await Hive.initFlutter(); // Initialize Hive with Flutter support
+  try {
+    // Initialize Firebase
+    await Firebase.initializeApp();
+    print('Firebase initialized successfully');
 
-  await Hive.openBox('ownerLoginAPI'); // Open the Hive box
-  await Hive.openBox('flag'); // Open the Hive box
-  bool flagValue = await checkFlagValue(); // Check the flag value
-  if (!flagValue) {
-    // clear ownerLoginAPI box
-    await Hive.box('ownerLoginAPI').clear();
-    await setFlagValue(true); // Set the flag value
+    // Request notification permissions and initialize Firebase Messaging
+    await FirebaseAPI().initNotification();
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    // Initialize Hive and open required boxes
+    await Hive.initFlutter();
+    await Hive.openBox('ownerLoginAPI');
+    await Hive.openBox('flag');
+
+    // Check and update the flag value
+    bool flagValue = await checkFlagValue();
+    if (!flagValue) {
+      await Hive.box('ownerLoginAPI').clear();
+      await setFlagValue(true);
+    }
+  } catch (e) {
+    print('Error during initialization: $e');
   }
-  runApp(const MyApp()); // Run the app
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -43,15 +54,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RPGL',
+      title: 'CSC Sports Carnival',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.white,
-            secondary: Colors.white,
-            primary: Colors.white),
+          seedColor: Colors.white,
+          secondary: Colors.white,
+          primary: Colors.white,
+        ),
         useMaterial3: true,
       ),
-      // home: SponsorScreen(),
+      // Set the initial screen to SplashScreen
       home: SplashScreen(),
     );
   }
